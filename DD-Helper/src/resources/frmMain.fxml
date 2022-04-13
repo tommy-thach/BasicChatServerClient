@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -13,10 +16,10 @@
    <children>
       <ToolBar prefHeight="40.0" prefWidth="700.0">
         <items>
-            <Label fx:id="lblWelcome" text="Welcome #Name" />
-            <BorderPane prefHeight="30.0" prefWidth="470.0">
+            <Label fx:id="lblWelcome" text="Welcome #NAME#" />
+            <BorderPane prefHeight="30.0" prefWidth="447.0">
                <center>
-                  <Label fx:id="lblCurrDate" text="Today is: " BorderPane.alignment="CENTER" />
+                  <Label fx:id="lblCurrDate" text="Today is: #CURR_DATE# " BorderPane.alignment="CENTER" />
                </center>
             </BorderPane>
             <BorderPane prefHeight="30.0" prefWidth="115.0">
@@ -30,7 +33,35 @@
         <tabs>
           <Tab text="Logger">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <SplitPane dividerPositions="0.7077363896848138" prefHeight="433.0" prefWidth="700.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <Label layoutX="211.0" layoutY="89.0" text="Money Made:" />
+                                    <Label layoutX="208.0" layoutY="143.0" text="Miles Traveled:" />
+                                    <Label layoutX="210.0" layoutY="194.0" text="Average MPG:" />
+                                    <Button layoutX="190.0" layoutY="392.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Log" />
+                                    <Label layoutX="200.0" layoutY="245.0" text="Current Gas Price:" />
+                                    <TextField alignment="CENTER" layoutX="182.0" layoutY="106.0" prefHeight="25.0" prefWidth="131.0" />
+                                    <TextField alignment="CENTER" layoutX="182.0" layoutY="159.0" prefHeight="25.0" prefWidth="131.0" />
+                                    <TextField alignment="CENTER" layoutX="182.0" layoutY="211.0" prefHeight="25.0" prefWidth="131.0" />
+                                    <TextField alignment="CENTER" layoutX="182.0" layoutY="262.0" prefHeight="25.0" prefWidth="131.0" />
+                                    <TextField alignment="CENTER" layoutX="182.0" layoutY="55.0" prefHeight="25.0" prefWidth="131.0" />
+                                    <Label layoutX="208.0" layoutY="38.0" text="Hours Worked:" />
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <Label layoutX="52.0" layoutY="14.0" text="Currently Viewing:" />
+                                    <DatePicker fx:id="dpDatePicker" editable="false" layoutX="21.0" layoutY="31.0" prefHeight="25.0" prefWidth="159.0" promptText="#DATE#" showWeekNumbers="true" stylesheets="@styles.css" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
             </content>
           </Tab>
           <Tab text="Calculator">
