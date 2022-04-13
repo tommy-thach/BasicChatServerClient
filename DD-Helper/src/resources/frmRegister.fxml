@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="316.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frmRegister">
+   <children>
+      <Button fx:id="btnRegister" layoutX="115.0" layoutY="279.0" mnemonicParsing="false" onAction="#btnRegisterClicked" prefHeight="25.0" prefWidth="89.0" text="Register" />
+      <Button fx:id="btnCancel" layoutX="115.0" layoutY="310.0" mnemonicParsing="false" onAction="#btnCancelClicked" prefHeight="25.0" prefWidth="89.0" text="Cancel" />
+      <TextField fx:id="txtUsername" layoutX="81.0" layoutY="49.0" prefHeight="25.0" prefWidth="212.0" />
+      <Label layoutX="18.0" layoutY="53.0" text="Username:" />
+      <Label layoutX="21.0" layoutY="97.0" text="Password:" />
+      <Label layoutX="39.0" layoutY="141.0" text="E-Mail:" />
+      <Label layoutX="112.0" layoutY="14.0" text="Registration Form" />
+      <TextField fx:id="txtEmail" layoutX="82.0" layoutY="137.0" prefHeight="25.0" prefWidth="212.0" />
+      <ChoiceBox fx:id="cbGender" layoutX="82.0" layoutY="220.0" prefHeight="25.0" prefWidth="122.0" />
+      <Label layoutX="34.0" layoutY="224.0" text="Gender:" />
+      <PasswordField fx:id="txtPassword" layoutX="82.0" layoutY="93.0" prefHeight="25.0" prefWidth="212.0" />
+      <DatePicker fx:id="dpBirthDate" editable="false" layoutX="82.0" layoutY="180.0" prefHeight="25.0" prefWidth="122.0" showWeekNumbers="true" />
+      <Label layoutX="20.0" layoutY="182.0" text="Birth Date:" />
+   </children>
+</AnchorPane>

@@ -3,7 +3,6 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,9 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class frmLogin {
@@ -33,14 +30,21 @@ public class frmLogin {
     @FXML
     private CheckBox chbxRememberName;
 
-    @FXML
-    void btnRegister(ActionEvent event) {
-        getUsername();
-    }
+    
     
 
     private Stage stage;
     private Parent root;
+
+    @FXML
+    void btnRegister(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmRegister.fxml"));
+        root = loader.load();
+        Node node = (Node) event.getSource();
+        stage = (Stage)node.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 
     @FXML
     void btnSignIn(ActionEvent event) throws IOException {
@@ -58,13 +62,10 @@ public class frmLogin {
     }
 
     @FXML
-    void chbxRememberNameClicked(MouseEvent event) throws IOException {
-            rememberUsername();  
-    }
-
-    @FXML
-    void txtUsernameMouseExited(MouseEvent event) throws IOException{
-        rememberUsername();
+    void txtUsernameKeyTyped(KeyEvent event) throws IOException{
+        if(chbxRememberName.isSelected() == true){
+            rememberUsername();
+        }
     }
 
     public void getUsername(){
@@ -87,20 +88,21 @@ public class frmLogin {
         bw.close();
     }
 
-   
-
     @FXML
     public void initialize() throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("src/user/login.txt"));
         String rememberNameIsChecked = br.readLine();
-
-        if(rememberNameIsChecked.equals("True")){
-            chbxRememberName.setSelected(true);
-            txtUsername.setText(br.readLine());
-            br.close();
-        }
-        else{
-            System.out.println("");
+  
+        
+        if(rememberNameIsChecked != null){
+            if(rememberNameIsChecked.equals("True")){
+                chbxRememberName.setSelected(true);
+                txtUsername.setText(br.readLine());
+                br.close();
+            }
+            else{
+                System.out.println("");
+            }
         }
         
     }

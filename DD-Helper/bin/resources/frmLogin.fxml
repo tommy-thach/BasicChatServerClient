@@ -11,11 +11,11 @@
    <children>
       <Text layoutX="183.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
       <Text layoutX="165.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
-      <TextField fx:id="txtUsername" layoutX="226.0" layoutY="142.0" onMouseExited="#txtUsernameMouseExited" />
+      <TextField fx:id="txtUsername" layoutX="226.0" layoutY="142.0" onKeyTyped="#txtUsernameKeyTyped" />
       <PasswordField fx:id="txtPassword" layoutX="226.0" layoutY="175.0" />
       <Button layoutX="226.0" layoutY="206.0" mnemonicParsing="false" onAction="#btnSignIn" prefHeight="25.0" prefWidth="149.0" text="Sign In" />
       <Button layoutX="226.0" layoutY="237.0" mnemonicParsing="false" onAction="#btnRegister" prefHeight="25.0" prefWidth="149.0" text="Register" />
-      <CheckBox fx:id="chbxRememberName" layoutX="226.0" layoutY="270.0" mnemonicParsing="false" onMouseClicked="#chbxRememberNameClicked" text="Remember Name" />
+      <CheckBox fx:id="chbxRememberName" layoutX="226.0" layoutY="270.0" mnemonicParsing="false" text="Remember Name" />
       <CheckBox fx:id="chbxAutoSignIn" layoutX="226.0" layoutY="293.0" mnemonicParsing="false" text="Automatically Sign In" />
       <Button layoutX="82.0" layoutY="76.0" mnemonicParsing="false" text="Button" />
    </children>

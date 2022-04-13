@@ -12,7 +12,8 @@
             "c:\\Program Files\\JavaFX\\lib\\javafx.media.jar",
             "c:\\Program Files\\JavaFX\\lib\\javafx.swing.jar",
             "c:\\Program Files\\JavaFX\\lib\\javafx.web.jar",
-            "c:\\Program Files\\JavaFX\\lib\\javafx-swt.jar"
+            "c:\\Program Files\\JavaFX\\lib\\javafx-swt.jar",
+            "c:\\Program Files (x86)\\MySQL\\Connector J 8.0\\mysql-connector-java-8.0.28.jar"
         ],
         "exclude": [
             "c:\\Users\\tthac\\OneDrive\\Documents\\GitHub\\JavaFX Librarys\\lib\\javafx-swt.jar"
