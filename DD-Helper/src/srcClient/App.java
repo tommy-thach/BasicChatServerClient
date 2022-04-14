@@ -1,3 +1,5 @@
+package srcClient;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -29,7 +31,7 @@ public class App extends Application {
     public void stop() throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
         loader.load();
-        BufferedReader br = new BufferedReader(new FileReader("src/user/login.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("src/srcClient/user/login.txt"));
         String rememberUsernameIsChecked = br.readLine();
         System.out.println(rememberUsernameIsChecked.equals("True"));
         

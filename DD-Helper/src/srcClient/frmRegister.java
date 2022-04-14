@@ -1,3 +1,4 @@
+package srcClient;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -65,7 +66,7 @@ public class frmRegister {
         String gender = "";
         Alert error = new Alert(AlertType.ERROR);
         error.setHeaderText(null);
-        
+
         if(localDate != null){
             dob = dpBirthDate.getValue().toString();
         }

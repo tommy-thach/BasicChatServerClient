@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="316.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frmRegister">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="316.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="srcClient.frmRegister">
    <children>
       <Button fx:id="btnRegister" layoutX="115.0" layoutY="279.0" mnemonicParsing="false" onAction="#btnRegisterClicked" prefHeight="25.0" prefWidth="89.0" text="Register" />
       <Button fx:id="btnCancel" layoutX="115.0" layoutY="310.0" mnemonicParsing="false" onAction="#btnCancelClicked" prefHeight="25.0" prefWidth="89.0" text="Cancel" />

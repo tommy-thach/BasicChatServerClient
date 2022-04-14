@@ -1,8 +1,11 @@
+package srcClient;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -78,7 +81,7 @@ public class frmLogin {
     }
 
     public void rememberUsername() throws IOException{
-        BufferedWriter bw = new BufferedWriter(new FileWriter("src/user/login.txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("src/srcClient/user/login.txt"));
         if(chbxRememberName.isSelected()==true){
             bw.write("True");
             bw.newLine();
@@ -94,7 +97,7 @@ public class frmLogin {
 
     @FXML
     public void initialize() throws IOException{
-        BufferedReader br = new BufferedReader(new FileReader("src/user/login.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("src/srcClient/user/login.txt"));
         String rememberNameIsChecked = br.readLine();
 
         if(rememberNameIsChecked != null){

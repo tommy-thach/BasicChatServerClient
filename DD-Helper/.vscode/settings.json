@@ -1,7 +1,7 @@
 {
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
-    "java.debug.settings.vmArgs": "--module-path \"C:/Program Files/JavaFX/lib/\" --add-modules javafx.controls,javafx.fxml",
+    "java.debug.settings.vmArgs": "--module-path \"C:/Program Files/JavaFX/lib\" --add-modules javafx.controls,javafx.fxml",
     "java.project.referencedLibraries": {
         "include": [
             "lib/**/*.jar",
