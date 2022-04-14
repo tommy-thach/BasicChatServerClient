@@ -20,6 +20,7 @@ public class App extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
+        stage.setTitle("Basic Chat Client");
         stage.show();
         
     }
@@ -40,10 +41,6 @@ public class App extends Application {
         br.close();
     }
 
-    public void rememberUsername() throws IOException{
-        
-        
-    }
     public static void main(String[] args) {
             launch();
         }

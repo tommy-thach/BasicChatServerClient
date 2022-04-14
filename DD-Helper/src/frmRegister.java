@@ -44,8 +44,17 @@ public class frmRegister {
     @FXML
     private TextField txtUsername;
 
+    public void showLoginForm(ActionEvent event) throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
+        root = loader.load();
+        Node node = (Node) event.getSource();
+        stage = (Stage)node.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
     @FXML
-    void btnRegisterClicked(ActionEvent event) {
+    void btnRegisterClicked(ActionEvent event) throws Exception {
         String username = txtUsername.getText();
         String password = txtPassword.getText();
         String email = txtEmail.getText();
@@ -55,7 +64,7 @@ public class frmRegister {
         String dob = "";
         String gender = "";
         Alert error = new Alert(AlertType.ERROR);
-
+        error.setHeaderText(null);
         if(localDate != null){
             dob = dpBirthDate.getValue().toString();
         }
@@ -64,27 +73,42 @@ public class frmRegister {
         }
 
         if(username.isEmpty()){
-            error.setHeaderText("Please enter a username.");
+            error.setContentText("Please enter a username.");
             error.showAndWait();
         }
         else if(password.isEmpty()){
-            error.setHeaderText("Please enter a password.");
+            error.setContentText("Please enter a password.");
             error.showAndWait();
         }
         else if(!emailExtSet.contains(emailExt)){
-            error.setHeaderText("Please enter a valid e-mail address.");
+            error.setContentText("Please enter a valid e-mail address.");
             error.showAndWait();
         }
         else if(dob.isEmpty()){
-            error.setHeaderText("Please enter a date of birth.");
+            error.setContentText("Please enter a date of birth.");
             error.showAndWait();
         }
         else if(gender.isEmpty()){
-            error.setHeaderText("Please select a gender.");
+            error.setContentText("Please select a gender.");
+            error.showAndWait();
+        }
+        else if(sqlDriver.containsDuplicateUsername(username) == true){
+            error.setContentText("Your chosen username is already registered!");
+            error.showAndWait();
+        }
+        else if(sqlDriver.containsDuplicateEMail(email) == true){
+            error.setContentText("Your chosen e-mail is already registered!");
             error.showAndWait();
         }
         else{
-            System.out.println("Username: " + username + "\nPassword: " + password +"\nE-Mail: " + email + "\nDOB: " + dob + "\nGender: " + gender);
+            sqlDriver.addToSQL(username, password, email, dob, gender, 0, 0);
+            Alert success = new Alert(AlertType.INFORMATION);
+            success.setHeaderText(null);
+            success.setContentText("You have successfully registered!");
+            success.showAndWait();
+
+            showLoginForm(event);
+            //System.out.println("Username: " + username + "\nPassword: " + password +"\nE-Mail: " + email + "\nDOB: " + dob + "\nGender: " + gender);
             //System.out.println(emailExt);
         }
         
@@ -92,13 +116,8 @@ public class frmRegister {
     }
 
     @FXML
-    void btnCancelClicked(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
-        root = loader.load();
-        Node node = (Node) event.getSource();
-        stage = (Stage)node.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+    void btnCancelClicked(ActionEvent event) throws Exception {
+        showLoginForm(event);
     }
 
     public void initialize() throws IOException{

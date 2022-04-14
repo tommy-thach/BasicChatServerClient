@@ -92,8 +92,7 @@ public class frmLogin {
     public void initialize() throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("src/user/login.txt"));
         String rememberNameIsChecked = br.readLine();
-  
-        
+
         if(rememberNameIsChecked != null){
             if(rememberNameIsChecked.equals("True")){
                 chbxRememberName.setSelected(true);
