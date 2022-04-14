@@ -9,9 +9,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
@@ -47,18 +49,25 @@ public class frmLogin {
     }
 
     @FXML
-    void btnSignIn(ActionEvent event) throws IOException {
+    void btnSignIn(ActionEvent event) throws Exception {
         String username = txtUsername.getText();
+        String password = txtPassword.getText();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmMain.fxml"));
-        root = loader.load();
-        frmMain frmMain = loader.getController();
-        frmMain.getName(username);
-
-        Node node = (Node) event.getSource();
-        stage = (Stage)node.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        if(sqlDriver.canLogin(username,password)){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmMain.fxml"));
+            root = loader.load();
+            Node node = (Node) event.getSource();
+            stage = (Stage)node.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
+        else{
+            Alert error = new Alert(AlertType.ERROR);
+            error.setHeaderText(null);
+            error.setContentText("Invalid username or password.");
+            error.showAndWait();
+        }
+        
     }
 
     @FXML
@@ -66,11 +75,6 @@ public class frmLogin {
         if(chbxRememberName.isSelected() == true){
             rememberUsername();
         }
-    }
-
-    public void getUsername(){
-        String username = txtUsername.getText();
-        System.out.println(username);
     }
 
     public void rememberUsername() throws IOException{

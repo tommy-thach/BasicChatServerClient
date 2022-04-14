@@ -22,7 +22,7 @@
       <ChoiceBox fx:id="cbGender" layoutX="82.0" layoutY="220.0" prefHeight="25.0" prefWidth="122.0" />
       <Label layoutX="34.0" layoutY="224.0" text="Gender:" />
       <PasswordField fx:id="txtPassword" layoutX="82.0" layoutY="93.0" prefHeight="25.0" prefWidth="212.0" />
-      <DatePicker fx:id="dpBirthDate" editable="false" layoutX="82.0" layoutY="180.0" prefHeight="25.0" prefWidth="122.0" showWeekNumbers="true" />
+      <DatePicker fx:id="dpBirthDate" editable="false" layoutX="82.0" layoutY="180.0" prefHeight="25.0" prefWidth="122.0" promptText="MM/DD/YYYY" showWeekNumbers="true" />
       <Label layoutX="20.0" layoutY="182.0" text="Birth Date:" />
    </children>
 </AnchorPane>

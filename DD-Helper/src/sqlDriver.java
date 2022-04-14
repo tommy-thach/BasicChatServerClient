@@ -38,6 +38,28 @@ public class sqlDriver {
         }
         return false;
     }
+
+    public static boolean canLogin(String username, String password) throws Exception{
+        try{
+            Connection conn = sqlConnect();
+            PreparedStatement get = conn.prepareStatement("SELECT username,password FROM testtbl WHERE username = '"+username+"' AND password = '"+password+"'");
+            //PreparedStatement getPassword = conn.prepareStatement("SELECT password FROM testtbl WHERE password = '"+password+"'");
+            ResultSet rs = get.executeQuery();
+            //ResultSet rsPassword = getPassword.executeQuery();
+            if(rs.next()){
+                System.out.println("Successfully signed in as "+username);
+                return true;
+            }
+            else{
+                System.out.println("Error can't sign in");
+            }
+        }
+        catch(Exception e){
+
+        }
+        return false;
+    }
+
     public static boolean containsDuplicateEMail(String email) throws Exception{
         try{
             Connection conn = sqlConnect();
