@@ -1,7 +1,9 @@
 package srcClient;
+
 import java.sql.*;
 
 public class sqlDriver {
+    public static String tempUsername;
     public static void main(String args[]) throws Exception{
         createTable();
     }
@@ -49,6 +51,7 @@ public class sqlDriver {
             //ResultSet rsPassword = getPassword.executeQuery();
             if(rs.next()){
                 System.out.println("Successfully signed in as "+username);
+                tempUsername = rs.getString("Username");
                 return true;
             }
             else{
@@ -93,6 +96,10 @@ public class sqlDriver {
         finally{
             System.out.println("Successfully added to table.");
         }
+    }
+
+    public static String returnUsername(){
+        return tempUsername;
     }
 
     public static Connection sqlConnect() throws Exception{

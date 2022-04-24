@@ -1,11 +1,7 @@
 package srcServer;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,6 +9,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class frmServer {
+    private static final int PORT = 5045;
+
+    serverConnection serverStart;
 
     @FXML
     private Button btnSend;
@@ -20,51 +19,39 @@ public class frmServer {
     @FXML
     private TextArea txtConsole;
 
+    public static TextArea staticTxtConsole;
+
     @FXML
     private TextField txtConsoleInput;
 
+    public static TextField staticTxtConsoleInput;
+
     @FXML
     void btnSendClicked(ActionEvent event) {
-
+        // serverMain.sendMessage(txtConsoleInput.getText());
     }
 
-    public void startServer(){
-        int PORT = 5025;
-        try {
-            ServerSocket server = new ServerSocket(PORT);
-            txtConsole.appendText("The TCP server is ready.");
-            txtConsole.appendText("\nListening on port "+PORT+"..");
-            while (true) {
-                Socket connectionSocket = server.accept();
-                DataInputStream in = new DataInputStream(connectionSocket.getInputStream());
-                DataOutputStream out = new DataOutputStream(connectionSocket.getOutputStream());
-                
-                String requestString = in.readUTF();
-                String responseString = requestString.toUpperCase();
-                System.out.println("Message to be sent back to client: ");
-                System.out.println(responseString);
-                
-                out.writeUTF(responseString);             
-                out.flush();
-                connectionSocket.close();
-                in.close(); 
-                out.close();
-                server.close();
-            }
-        } catch(IOException e) { 
-            e.printStackTrace();
-        }
-    }
-    
     public class serverThread extends Thread {
-        public void run(){
-            startServer();
+        public void run() {
+            ServerSocket serverSocket;
+            try {
+                serverSocket = new ServerSocket(PORT);
+                serverConnection server = new serverConnection(serverSocket);
+                server.startServer();
+                Thread.sleep(1);
+            } catch (IOException | InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
     @FXML
-    public void initialize(){
-        serverThread server = new serverThread();
-        server.start();
+    public void initialize() {
+        staticTxtConsole = txtConsole;
+        serverThread serverThread = new serverThread();
+        serverThread.setDaemon(true);
+        serverThread.start();
+        txtConsole.appendText("Server started.\nListening on port 5045..\n");
     }
+
 }

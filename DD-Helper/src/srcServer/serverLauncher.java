@@ -9,9 +9,9 @@ import javafx.scene.Scene;
 
 import javafx.stage.Stage;
  
-public class serverDriver extends Application {
+public class serverLauncher extends Application {
     private Parent root;
-
+    
     @Override
     public void start(Stage stage) throws IOException {
         //System.out.println(getClass().getResource("resources/frmServer.fxml"));

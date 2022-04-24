@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 
 public class frmRegister {
     private Stage stage;
-    private Parent root;
 
     @FXML
     private Button btnCancel;
@@ -46,11 +45,10 @@ public class frmRegister {
     private TextField txtUsername;
 
     public void showLoginForm(ActionEvent event) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
-        root = loader.load();
+        Parent loader = FXMLLoader.load(getClass().getResource("resources/frmLogin.fxml"));
         Node node = (Node) event.getSource();
         stage = (Stage)node.getScene().getWindow();
-        stage.setScene(new Scene(root));
+        stage.setScene(new Scene(loader));
         stage.show();
     }
 

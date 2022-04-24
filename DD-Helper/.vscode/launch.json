@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch serverMain",
+            "request": "launch",
+            "mainClass": "srcServer.serverMain",
+            "projectName": "DD-Helper_f338d4b9"
+        },
+        {
+            "type": "java",
             "name": "Launch frmServer",
             "request": "launch",
             "mainClass": "frmServer",

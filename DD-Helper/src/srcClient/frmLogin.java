@@ -24,7 +24,10 @@ public class frmLogin {
     @FXML
     private PasswordField txtPassword;
 
-    @FXML TextField txtUsername;
+    @FXML 
+    private TextField txtUsername;
+
+    public static TextField staticTxtUsername;
     
     @FXML
     private CheckBox chbxAutoSignIn;
@@ -35,19 +38,14 @@ public class frmLogin {
     @FXML
     private CheckBox chbxRememberName;
 
-    
-    
-
     private Stage stage;
-    private Parent root;
-
+    
     @FXML
     void btnRegister(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmRegister.fxml"));
-        root = loader.load();
+        Parent loader = FXMLLoader.load(getClass().getResource("resources/frmRegister.fxml"));
         Node node = (Node) event.getSource();
         stage = (Stage)node.getScene().getWindow();
-        stage.setScene(new Scene(root));
+        stage.setScene(new Scene(loader));
         stage.show();
     }
 
@@ -57,11 +55,10 @@ public class frmLogin {
         String password = txtPassword.getText();
 
         if(sqlDriver.canLogin(username,password)){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmMain.fxml"));
-            root = loader.load();
+            Parent loader = FXMLLoader.load(getClass().getResource("resources/frmMain.fxml"));
             Node node = (Node) event.getSource();
             stage = (Stage)node.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(loader));
             stage.show();
         }
         else{
@@ -71,6 +68,11 @@ public class frmLogin {
             error.showAndWait();
         }
         
+    }
+
+    @FXML
+    void chbxAutoSignInClicked(ActionEvent event) throws Exception{
+        //System.out.println(returnUsername());
     }
 
     @FXML
@@ -97,6 +99,8 @@ public class frmLogin {
 
     @FXML
     public void initialize() throws IOException{
+        staticTxtUsername = txtUsername;
+
         BufferedReader br = new BufferedReader(new FileReader("src/srcClient/user/login.txt"));
         String rememberNameIsChecked = br.readLine();
 
