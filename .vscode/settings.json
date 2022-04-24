@@ -1,0 +1,22 @@
+{
+        "java.project.referencedLibraries": [
+                "lib/**/*.jar",
+                "c:\\Users\\tthac\\OneDrive\\Documents\\GitHub\\JavaFX Librarys\\javafx.base.jar",
+                "c:\\Users\\tthac\\OneDrive\\Documents\\GitHub\\JavaFX Librarys\\javafx.controls.jar",
+                "c:\\Users\\tthac\\OneDrive\\Documents\\GitHub\\JavaFX Librarys\\javafx.fxml.jar",
+                "c:\\Users\\tthac\\OneDrive\\Documents\\GitHub\\JavaFX Librarys\\javafx.graphics.jar",
+                "c:\\Users\\tthac\\OneDrive\\Documents\\GitHub\\JavaFX Librarys\\javafx.media.jar",
+                "c:\\Users\\tthac\\OneDrive\\Documents\\GitHub\\JavaFX Librarys\\javafx.swing.jar",
+                "c:\\Users\\tthac\\OneDrive\\Documents\\GitHub\\JavaFX Librarys\\javafx.web.jar",
+                "c:\\Users\\tthac\\OneDrive\\Documents\\GitHub\\JavaFX Librarys\\javafx-swt.jar",
+                "c:\\Program Files\\JavaFX\\lib\\javafx.base.jar",
+                "c:\\Program Files\\JavaFX\\lib\\javafx.controls.jar",
+                "c:\\Program Files\\JavaFX\\lib\\javafx.fxml.jar",
+                "c:\\Program Files\\JavaFX\\lib\\javafx.graphics.jar",
+                "c:\\Program Files\\JavaFX\\lib\\javafx.media.jar",
+                "c:\\Program Files\\JavaFX\\lib\\javafx.swing.jar",
+                "c:\\Program Files\\JavaFX\\lib\\javafx.web.jar",
+                "c:\\Program Files\\JavaFX\\lib\\javafx-swt.jar",
+                "c:\\Program Files (x86)\\MySQL\\Connector J 8.0\\mysql-connector-java-8.0.28.jar"
+        ]
+}

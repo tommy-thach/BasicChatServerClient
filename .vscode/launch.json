@@ -1,0 +1,39 @@
+{
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+                {
+                        "type": "java",
+                        "name": "Launch Current File",
+                        "request": "launch",
+                        "mainClass": "${file}",
+                        "vmArgs": "--module-path \"C:/Program Files/JavaFX/lib/\"  --add-modules javafx.controls,javafx.fxml",
+                },
+                {
+                        "type": "java",
+                        "name": "Launch clientLauncher",
+                        "request": "launch",
+                        "mainClass": "srcClient.clientLauncher",
+                        "projectName": "BasicChatServerClient_26141666",
+                        "vmArgs": "--module-path \"C:/Program Files/JavaFX/lib/\"  --add-modules javafx.controls,javafx.fxml",
+                },
+                {
+                        "type": "java",
+                        "name": "Launch sqlDriver",
+                        "request": "launch",
+                        "mainClass": "srcClient.sqlDriver",
+                        "projectName": "BasicChatServerClient_26141666",
+                        "vmArgs": "--module-path \"C:/Program Files/JavaFX/lib/\"  --add-modules javafx.controls,javafx.fxml",
+                },
+                {
+                        "type": "java",
+                        "name": "Launch serverLauncher",
+                        "request": "launch",
+                        "mainClass": "srcServer.serverLauncher",
+                        "projectName": "BasicChatServerClient_26141666",
+                        "vmArgs": "--module-path \"C:/Program Files/JavaFX/lib/\"  --add-modules javafx.controls,javafx.fxml",
+                }
+        ]
+}

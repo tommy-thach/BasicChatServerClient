@@ -83,7 +83,7 @@ public class frmLogin {
     }
 
     public void rememberUsername() throws IOException{
-        BufferedWriter bw = new BufferedWriter(new FileWriter("src/srcClient/user/login.txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("BasicChatServerClient/src/srcClient/user/login.txt"));
         if(chbxRememberName.isSelected()==true){
             bw.write("True");
             bw.newLine();
@@ -101,7 +101,7 @@ public class frmLogin {
     public void initialize() throws IOException{
         staticTxtUsername = txtUsername;
 
-        BufferedReader br = new BufferedReader(new FileReader("src/srcClient/user/login.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("BasicChatServerClient/src/srcClient/user/login.txt"));
         String rememberNameIsChecked = br.readLine();
 
         if(rememberNameIsChecked != null){

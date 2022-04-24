@@ -9,14 +9,14 @@
             "name": "Launch serverMain",
             "request": "launch",
             "mainClass": "srcServer.serverMain",
-            "projectName": "DD-Helper_f338d4b9"
+            "projectName": "BasicChatServerClient_f338d4b9"
         },
         {
             "type": "java",
             "name": "Launch frmServer",
             "request": "launch",
             "mainClass": "frmServer",
-            "projectName": "DD-Helper_f338d4b9"
+            "projectName": "BasicChatServerClient_f338d4b9"
         },
         {
             "type": "java",
@@ -28,9 +28,9 @@
             "type": "java",
             "name": "Launch App",
             "request": "launch",
-            "vmArgs": "--module-path \"C:/Program Files/JavaFX/lib/\" --add-modules javafx.controls,javafx.fxml",
+            "vmArgs": "--module-path \"C:/Program Files/JavaFX/lib/\"  --add-modules javafx.controls,javafx.fxml",
             "mainClass": "App",
-            "projectName": "DD-Helper_f338d4b9"
+            "projectName": "BasicChatServerClient_f338d4b9"
         }
     ]
 }
