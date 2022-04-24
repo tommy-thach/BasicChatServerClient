@@ -15,18 +15,19 @@ import java.util.Date;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class frmMain implements Runnable {
-    private static final String ipAddress = "localhost";
-    private static final int port = 5045;
+    private static final String IP_ADDR = "localhost";
+    private static final int PORT = 5045;
 
     @FXML
     private DatePicker dpDatePicker;
@@ -71,18 +72,15 @@ public class frmMain implements Runnable {
     }
 
     @FXML
+    void txtChatInputKeyPressed(KeyEvent event) {
+        if(event.getCode().equals(KeyCode.ENTER)){
+            sendMessage();
+        }
+    }
+    
+    @FXML
     void btnSignOutClicked(ActionEvent event) throws IOException {
-        Node node = (Node) event.getSource();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
-        Stage stage = (Stage) node.getScene().getWindow();
-        stage.setScene(new Scene(loader.load()));
-        stage.show();
-
-        out.write("[SERVER]: " + sqlDriver.returnUsername() + " has disconnected!");
-        out.newLine();
-        out.flush();
-
-        closeSockets();
+        disconnect();
     }
 
     @FXML
@@ -91,7 +89,7 @@ public class frmMain implements Runnable {
         lblWelcome.setText("Welcome " + sqlDriver.returnUsername());
         lblCurrDate.setText("Today is: " + getCurrDate());
 
-        socket = new Socket(ipAddress,port);
+        socket = new Socket(IP_ADDR,PORT);
         
         connect();
         System.out.println("CONNECT() RAN");
@@ -102,7 +100,7 @@ public class frmMain implements Runnable {
     public void connect() throws UnknownHostException, IOException {
         txtChat.appendText("Connecting..\n");
 
-        txtChat.appendText("Connected to " + ipAddress + " on port " + port + "!\n");
+        txtChat.appendText("Connected to " + IP_ADDR + " on port " + PORT + "!\n");
         System.out.println("Socket created");
 
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -113,6 +111,19 @@ public class frmMain implements Runnable {
         out.flush();
 
         listenForMessage();
+    }
+
+    public void disconnect() throws IOException{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
+            Stage stage = (Stage) btnSignOut.getScene().getWindow();
+            stage.setScene(new Scene(loader.load()));
+            stage.show();
+
+            out.write("[SERVER]: " + sqlDriver.returnUsername() + " has disconnected!");
+            out.newLine();
+            out.flush();
+
+            closeSockets();
     }
 
     public void listenForMessage() {
@@ -140,11 +151,25 @@ public class frmMain implements Runnable {
         }
     }
     public void checkForCommands() throws IOException{
-        if(txtChatInput.getText().equals("/help")){
+        String input=txtChatInput.getText();
+
+        if(input.equals("/help")){
             txtChat.appendText("-=[List of Commands]=-\n");
-            txtChat.appendText("[Command]\t::\t[Usage]\n");
+            txtChat.appendText("[Command]\t\t[Usage]\n");
+            txtChat.appendText("/help\t\t\tDisplays a list of all available commands\n");
+            txtChat.appendText("/clear\t\t\tClears the chat screen\n");
+            txtChat.appendText("/disconnect\t\tDisconnect yourself from the server\n");
         }
-        System.out.println(txtChatInput.getText());
+        else if(input.equals("/clear")){
+            txtChat.clear();
+        }
+        else if(input.equals("/disconnect")){
+            disconnect();
+        }
+        else{
+            txtChat.appendText("[Error] Invalid command! Enter /help for a list of available commands.");
+        }
+        //System.out.println(txtChatInput.getText());
     }
 
     public void closeSockets() {

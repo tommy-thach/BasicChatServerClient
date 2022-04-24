@@ -51,7 +51,7 @@ public class frmServer {
         serverThread serverThread = new serverThread();
         serverThread.setDaemon(true);
         serverThread.start();
-        txtConsole.appendText("Server started.\nListening on port 5045..\n");
+        txtConsole.appendText("Server started.\nListening on port "+PORT+"..\n");
     }
 
 }

@@ -17,8 +17,9 @@ public class clientHandler extends frmServer implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             username = in.readLine();
-
             handlerList.add(this);
+
+            sendMessage("[SERVER]: " + username + " has connected!");
             staticTxtConsole.appendText("[SERVER]: " + username + " has connected!\n");
         } catch (IOException e) {
             closeSockets();
