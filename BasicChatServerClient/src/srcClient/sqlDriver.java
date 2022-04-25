@@ -21,6 +21,36 @@ public class sqlDriver {
         }
     }
 
+    public static boolean isAdmin(String username) throws Exception{
+        try{
+            Connection conn = sqlConnect();
+            PreparedStatement get = conn.prepareStatement("SELECT username,isAdmin FROM testtbl WHERE username = '"+username+"' AND isAdmin = '1'");
+            ResultSet rs = get.executeQuery();
+            
+            if(rs.next()){
+                return true;
+            }
+        }
+        catch(Exception e){}
+
+        return false;
+    }
+
+    public static boolean isBanned(String username) throws Exception{
+        try{
+            Connection conn = sqlConnect();
+            PreparedStatement get = conn.prepareStatement("SELECT username,isBanned FROM testtbl WHERE username = '"+username+"' AND isBanned = '1'");
+            ResultSet rs = get.executeQuery();
+            
+            if(rs.next()){
+                return true;
+            }
+        }
+        catch(Exception e){}
+
+        return false;
+    }
+
     public static boolean containsDuplicateUsername(String username) throws Exception{
         try{
             Connection conn = sqlConnect();
@@ -49,18 +79,22 @@ public class sqlDriver {
             //PreparedStatement getPassword = conn.prepareStatement("SELECT password FROM testtbl WHERE password = '"+password+"'");
             ResultSet rs = get.executeQuery();
             //ResultSet rsPassword = getPassword.executeQuery();
-            if(rs.next()){
-                System.out.println("Successfully signed in as "+username);
-                tempUsername = rs.getString("Username");
-                return true;
+            if(isBanned(username)){
+                System.out.println("User banned");
             }
             else{
-                System.out.println("Error can't sign in");
+                if(rs.next()){
+                    System.out.println("Successfully signed in as "+username);
+                    tempUsername = rs.getString("Username");
+                    return true;
+                }
+                else{
+                    System.out.println("Error can't sign in");
+                }
             }
         }
-        catch(Exception e){
-
-        }
+        catch(Exception e){}
+        
         return false;
     }
 

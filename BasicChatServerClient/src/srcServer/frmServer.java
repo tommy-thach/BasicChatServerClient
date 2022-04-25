@@ -2,11 +2,25 @@ package srcServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
+
 
 public class frmServer {
     private static final int PORT = 5045;
@@ -27,8 +41,178 @@ public class frmServer {
     public static TextField staticTxtConsoleInput;
 
     @FXML
+    private TableView<sqlDriver> tvUserList;
+
+    @FXML
+    private TableColumn<sqlDriver, String> columnID;
+
+    @FXML
+    private TableColumn<sqlDriver, String> columnUsername;
+
+    @FXML
+    private TableColumn<sqlDriver, String> columnPassword;
+
+    @FXML
+    private TableColumn<sqlDriver, String> columnEmail;
+
+    @FXML
+    private TableColumn<sqlDriver, String> columnDOB;
+    
+    @FXML
+    private TableColumn<sqlDriver, String> columnGender;
+
+    @FXML
+    private TableColumn<sqlDriver, String> columnAdmin;
+
+    @FXML
+    private TableColumn<sqlDriver, String> columnBanned;
+
+    @FXML
+    private Button btnBan;
+
+    @FXML
+    private Button btnUnban;
+
+    @FXML
+    private Button btnDeleteAcc;
+
+    @FXML
+    private Button btnMakeAdmin;
+
+    @FXML
+    private Button btnRevokeAdmin;
+
+    @FXML
+    private Button btnRefreshData;
+    
+    private ObservableList<sqlDriver> data;
+
+    @FXML
     void btnSendClicked(ActionEvent event) {
         // serverMain.sendMessage(txtConsoleInput.getText());
+    }
+
+    @FXML
+    void btnBanClicked(ActionEvent event){
+        data = tvUserList.getSelectionModel().getSelectedItems();
+        String selectedID = data.get(0).getID();
+        String selectedUsername = data.get(0).getUsername();
+
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+        alert.setContentText("Are you sure you want to ban " + selectedUsername +"?");
+        
+        if(!data.isEmpty()){
+            alert.showAndWait().ifPresent(type -> {
+                if (type == ButtonType.YES) {
+                    try{
+                        Connection conn = sqlDriver.sqlConnect();
+                        Statement statement = conn.createStatement();
+                        System.out.println(selectedUsername);
+                        statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '1' WHERE (`id` = '"+selectedID+"')");
+                        loadData();
+                        
+                        alert.getButtonTypes().clear();
+                        alert.getButtonTypes().addAll(ButtonType.OK);
+                        alert.setContentText(selectedUsername+" has been banned from the server.");
+                        alert.showAndWait();
+                    }
+                    catch(Exception e){
+                    }
+                } 
+            });
+        }
+    }
+
+    @FXML
+    void btnUnbanClicked(ActionEvent event) {
+        data = tvUserList.getSelectionModel().getSelectedItems();
+        String selectedID = data.get(0).getID();
+        String selectedUsername = data.get(0).getUsername();
+
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+        alert.setContentText("Are you sure you want to unban " + selectedUsername +"?");
+        
+        if(!data.isEmpty()){
+            alert.showAndWait().ifPresent(type -> {
+                if (type == ButtonType.YES) {
+                    try{
+                        Connection conn = sqlDriver.sqlConnect();
+                        Statement statement = conn.createStatement();
+                        System.out.println(selectedUsername);
+                        statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '0' WHERE (`id` = '"+selectedID+"')");
+                        loadData();
+                        
+                        alert.getButtonTypes().clear();
+                        alert.getButtonTypes().addAll(ButtonType.OK);
+                        alert.setContentText(selectedUsername+" has been unbanned from the server.");
+                        alert.showAndWait();
+                    }
+                    catch(Exception e){
+                    }
+                } 
+            });
+        }
+    }
+
+    @FXML
+    void btnDeleteAccClicked(ActionEvent event) throws Exception {
+        
+    }
+
+    @FXML
+    void btnMakeAdminClicked(ActionEvent event) throws Exception {
+        data = tvUserList.getSelectionModel().getSelectedItems();
+        String selectedID = data.get(0).getID();
+        String selectedUsername = data.get(0).getUsername();
+
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText(null);
+
+        if(!data.isEmpty()){
+            Connection conn = sqlDriver.sqlConnect();
+            Statement statement = conn.createStatement();
+
+            System.out.println(selectedUsername);
+            statement.execute("UPDATE `testdb`.`testtbl` SET `isAdmin` = '1' WHERE (`id` = '"+selectedID+"')");
+            loadData();
+            
+            alert.setContentText(selectedUsername+" has been promoted to admin.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    void btnRevokeAdminClicked(ActionEvent event) throws Exception{
+        data = tvUserList.getSelectionModel().getSelectedItems();
+        String selectedID = data.get(0).getID();
+        String selectedUsername = data.get(0).getUsername();
+
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText(null);
+
+        if(!data.isEmpty()){
+            Connection conn = sqlDriver.sqlConnect();
+            Statement statement = conn.createStatement();
+
+            System.out.println(selectedUsername);
+            statement.execute("UPDATE `testdb`.`testtbl` SET `isAdmin` = '0' WHERE (`id` = '"+selectedID+"')");
+            loadData();
+            
+            
+            alert.setContentText(selectedUsername+" has been demoted from admin.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    void btnRefreshDataClicked(ActionEvent event) throws Exception{
+        loadData();
     }
 
     public class serverThread extends Thread {
@@ -45,13 +229,38 @@ public class frmServer {
         }
     }
 
+    public void loadData() throws Exception{
+        try{
+            data = FXCollections.observableArrayList();
+            Connection conn = sqlDriver.sqlConnect();
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM testtbl");
+            while(rs.next()){
+                data.add(new sqlDriver(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
+            }
+        }
+        catch(SQLException e){
+            
+        }
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
+        columnPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
+        columnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        columnDOB.setCellValueFactory(new PropertyValueFactory<>("dob"));
+        columnGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        columnBanned.setCellValueFactory(new PropertyValueFactory<>("banned"));
+        columnAdmin.setCellValueFactory(new PropertyValueFactory<>("admin"));
+        tvUserList.setItems(data);
+    }
+
     @FXML
-    public void initialize() {
+    public void initialize() throws Exception {
         staticTxtConsole = txtConsole;
         serverThread serverThread = new serverThread();
         serverThread.setDaemon(true);
         serverThread.start();
         txtConsole.appendText("Server started.\nListening on port "+PORT+"..\n");
+        loadData();
+
     }
 
 }

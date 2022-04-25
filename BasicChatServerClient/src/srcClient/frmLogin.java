@@ -51,23 +51,29 @@ public class frmLogin {
 
     @FXML
     void btnSignIn(ActionEvent event) throws Exception {
+        Alert error = new Alert(AlertType.ERROR);
+        error.setHeaderText(null);
+
         String username = txtUsername.getText();
         String password = txtPassword.getText();
 
-        if(sqlDriver.canLogin(username,password)){
-            Parent loader = FXMLLoader.load(getClass().getResource("resources/frmMain.fxml"));
-            Node node = (Node) event.getSource();
-            stage = (Stage)node.getScene().getWindow();
-            stage.setScene(new Scene(loader));
-            stage.show();
-        }
-        else{
-            Alert error = new Alert(AlertType.ERROR);
-            error.setHeaderText(null);
-            error.setContentText("Invalid username or password.");
+        if(sqlDriver.isBanned(username)){
+            error.setContentText("You are banned from the server.");
             error.showAndWait();
         }
-        
+        else{
+            if(sqlDriver.canLogin(username,password)){
+                Parent loader = FXMLLoader.load(getClass().getResource("resources/frmMain.fxml"));
+                Node node = (Node) event.getSource();
+                stage = (Stage)node.getScene().getWindow();
+                stage.setScene(new Scene(loader));
+                stage.show();
+            }
+            else{
+                error.setContentText("Invalid username or password.");
+                error.showAndWait();
+            }
+        }
     }
 
     @FXML

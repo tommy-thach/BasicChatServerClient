@@ -67,12 +67,12 @@ public class frmMain implements Runnable {
 
 
     @FXML
-    void btnSendClicked(ActionEvent event) throws IOException{
+    void btnSendClicked(ActionEvent event) throws Exception{
         sendMessage();
     }
 
     @FXML
-    void txtChatInputKeyPressed(KeyEvent event) {
+    void txtChatInputKeyPressed(KeyEvent event) throws Exception {
         if(event.getCode().equals(KeyCode.ENTER)){
             sendMessage();
         }
@@ -94,7 +94,6 @@ public class frmMain implements Runnable {
         connect();
         System.out.println("CONNECT() RAN");
         System.out.println("SOCKET IS CONNECTED: " + socket.isConnected());
-
     }
 
     public void connect() throws UnknownHostException, IOException {
@@ -132,14 +131,19 @@ public class frmMain implements Runnable {
         thread.start();
     }
 
-    public void sendMessage(){
+    public void sendMessage() throws Exception{
         try {
             if(!txtChatInput.getText().isEmpty()){
                 if(txtChatInput.getText().startsWith("/")){
                     checkForCommands();
                 }
                 else{
-                    out.write(sqlDriver.returnUsername() + ": " + txtChatInput.getText());
+                    if(sqlDriver.isAdmin(sqlDriver.returnUsername())){
+                        out.write("[ADMIN] " + sqlDriver.returnUsername() + ": " + txtChatInput.getText());
+                    }
+                    else{
+                        out.write(sqlDriver.returnUsername() + ": " + txtChatInput.getText());
+                    }
                     out.newLine();
                     out.flush();
                 }
@@ -150,6 +154,7 @@ public class frmMain implements Runnable {
             Thread.currentThread().interrupt();
         }
     }
+    
     public void checkForCommands() throws IOException{
         String input=txtChatInput.getText();
 
