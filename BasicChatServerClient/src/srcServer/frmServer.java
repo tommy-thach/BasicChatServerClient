@@ -94,125 +94,71 @@ public class frmServer {
 
     @FXML
     void btnBanClicked(ActionEvent event){
-        data = tvUserList.getSelectionModel().getSelectedItems();
-        String selectedID = data.get(0).getID();
-        String selectedUsername = data.get(0).getUsername();
-
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.getButtonTypes().clear();
-        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-        alert.setContentText("Are you sure you want to ban " + selectedUsername +"?");
-        
-        if(!data.isEmpty()){
-            alert.showAndWait().ifPresent(type -> {
-                if (type == ButtonType.YES) {
-                    try{
-                        Connection conn = sqlDriver.sqlConnect();
-                        Statement statement = conn.createStatement();
-                        System.out.println(selectedUsername);
-                        statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '1' WHERE (`id` = '"+selectedID+"')");
-                        loadData();
-                        
-                        alert.getButtonTypes().clear();
-                        alert.getButtonTypes().addAll(ButtonType.OK);
-                        alert.setContentText(selectedUsername+" has been banned from the server.");
-                        alert.showAndWait();
-                    }
-                    catch(Exception e){
-                    }
-                } 
-            });
-        }
+        setBan(1);
     }
 
     @FXML
     void btnUnbanClicked(ActionEvent event) {
-        data = tvUserList.getSelectionModel().getSelectedItems();
-        String selectedID = data.get(0).getID();
-        String selectedUsername = data.get(0).getUsername();
-
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.getButtonTypes().clear();
-        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-        alert.setContentText("Are you sure you want to unban " + selectedUsername +"?");
-        
-        if(!data.isEmpty()){
-            alert.showAndWait().ifPresent(type -> {
-                if (type == ButtonType.YES) {
-                    try{
-                        Connection conn = sqlDriver.sqlConnect();
-                        Statement statement = conn.createStatement();
-                        System.out.println(selectedUsername);
-                        statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '0' WHERE (`id` = '"+selectedID+"')");
-                        loadData();
-                        
-                        alert.getButtonTypes().clear();
-                        alert.getButtonTypes().addAll(ButtonType.OK);
-                        alert.setContentText(selectedUsername+" has been unbanned from the server.");
-                        alert.showAndWait();
-                    }
-                    catch(Exception e){
-                    }
-                } 
-            });
-        }
-    }
-
-    @FXML
-    void btnDeleteAccClicked(ActionEvent event) throws Exception {
-        
+        setBan(0);
     }
 
     @FXML
     void btnMakeAdminClicked(ActionEvent event) throws Exception {
-        data = tvUserList.getSelectionModel().getSelectedItems();
-        String selectedID = data.get(0).getID();
-        String selectedUsername = data.get(0).getUsername();
-
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText(null);
-
-        if(!data.isEmpty()){
-            Connection conn = sqlDriver.sqlConnect();
-            Statement statement = conn.createStatement();
-
-            System.out.println(selectedUsername);
-            statement.execute("UPDATE `testdb`.`testtbl` SET `isAdmin` = '1' WHERE (`id` = '"+selectedID+"')");
-            loadData();
-            
-            alert.setContentText(selectedUsername+" has been promoted to admin.");
-            alert.showAndWait();
-        }
+        setAdmin(1);
     }
 
     @FXML
     void btnRevokeAdminClicked(ActionEvent event) throws Exception{
-        data = tvUserList.getSelectionModel().getSelectedItems();
-        String selectedID = data.get(0).getID();
-        String selectedUsername = data.get(0).getUsername();
-
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText(null);
-
-        if(!data.isEmpty()){
-            Connection conn = sqlDriver.sqlConnect();
-            Statement statement = conn.createStatement();
-
-            System.out.println(selectedUsername);
-            statement.execute("UPDATE `testdb`.`testtbl` SET `isAdmin` = '0' WHERE (`id` = '"+selectedID+"')");
-            loadData();
-            
-            
-            alert.setContentText(selectedUsername+" has been demoted from admin.");
-            alert.showAndWait();
-        }
+        setAdmin(0);
     }
 
     @FXML
     void btnRefreshDataClicked(ActionEvent event) throws Exception{
         loadData();
+    }
+
+    @FXML
+    void btnDeleteAccClicked(ActionEvent event) throws Exception {
+        data = tvUserList.getSelectionModel().getSelectedItems();
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+        if(!data.isEmpty()){
+            String selectedID = data.get(0).getID();
+            String selectedUsername = data.get(0).getUsername();
+            alert.setContentText("Are you sure you want to permanently delete " + selectedUsername +" account?");
+            alert.showAndWait().ifPresent(type -> {
+                if (type == ButtonType.YES) {
+                    alert.setContentText("Are absolutely positive? This action cannot be undone.");
+                    alert.showAndWait();
+                    if(type == ButtonType.YES){
+                        try{
+                            Connection conn = sqlDriver.sqlConnect();
+                            Statement statement = conn.createStatement();
+                            statement.execute("DELETE from testtbl WHERE (`id` = '"+selectedID+"')");
+                            loadData();
+                            
+                            alert.getButtonTypes().clear();
+                            alert.getButtonTypes().addAll(ButtonType.OK);
+                            alert.setContentText(selectedUsername+"'s account has been permanently deleted.'");
+                            alert.showAndWait();
+                        }
+                        
+                        catch(Exception e){
+                        }
+                    }
+                } 
+            });
+        }
+        else{
+            alert.setAlertType(AlertType.ERROR);
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(ButtonType.OK);
+            alert.setContentText("Please select an entry from the table.");
+            alert.showAndWait();
+        }
     }
 
     public class serverThread extends Thread {
@@ -226,6 +172,111 @@ public class frmServer {
             } catch (IOException | InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+        }
+    }
+    public void setBan(int isBanned){
+        data = tvUserList.getSelectionModel().getSelectedItems();
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+        if(!data.isEmpty()){
+            String selectedID = data.get(0).getID();
+            String selectedUsername = data.get(0).getUsername();
+
+            if(isBanned == 1){
+                alert.setContentText("Are you sure you want to ban " + selectedUsername +"?");
+            }
+            else{
+                alert.setContentText("Are you sure you want to unban " + selectedUsername +"?");
+            }
+
+            alert.showAndWait().ifPresent(type -> {
+                if (type == ButtonType.YES) {
+                    try{
+                        Connection conn = sqlDriver.sqlConnect();
+                        Statement statement = conn.createStatement();
+                        System.out.println(selectedUsername);
+                        statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '"+isBanned+"' WHERE (`id` = '"+selectedID+"')");
+                        loadData();
+                        
+                        alert.getButtonTypes().clear();
+                        alert.getButtonTypes().addAll(ButtonType.OK);
+
+                        if(isBanned==1){
+                            alert.setContentText(selectedUsername+" has been banned.");
+                            alert.showAndWait();
+                        }
+                        else{
+                            alert.setContentText(selectedUsername+" has been unbanned.");
+                            alert.showAndWait();
+                        }
+                    }
+                    catch(Exception e){
+                    }
+                } 
+            });
+        }
+        else{
+            alert.setAlertType(AlertType.ERROR);
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(ButtonType.OK);
+            alert.setContentText("Please select an entry from the table.");
+            alert.showAndWait();
+        }
+    }
+
+    public void setAdmin(int isAdmin){
+        data = tvUserList.getSelectionModel().getSelectedItems();
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+        if(!data.isEmpty()){
+            String selectedID = data.get(0).getID();
+            String selectedUsername = data.get(0).getUsername();
+
+            if(isAdmin == 1){
+                alert.setContentText("Are you sure you want to promote " + selectedUsername +" to admin?");
+            }
+            else{
+                alert.setContentText("Are you sure you want to revoke " + selectedUsername +"'s admin rights?");
+            }
+
+            alert.showAndWait().ifPresent(type -> {
+                if (type == ButtonType.YES) {
+                    try{
+                        Connection conn = sqlDriver.sqlConnect();
+                        Statement statement = conn.createStatement();
+                        System.out.println(selectedUsername);
+                        statement.execute("UPDATE `testdb`.`testtbl` SET `isAdmin` = '"+isAdmin+"' WHERE (`id` = '"+selectedID+"')");
+                        loadData();
+                        
+                        alert.getButtonTypes().clear();
+                        alert.getButtonTypes().addAll(ButtonType.OK);
+
+                        if(isAdmin==1){
+                            alert.setContentText(selectedUsername+" has been promoted to admin.");
+                            alert.showAndWait();
+                        }
+                        else{
+                            alert.setContentText(selectedUsername+" has been demoted from admin.");
+                            alert.showAndWait();
+                        }
+                    }
+                    catch(Exception e){
+                    }
+                } 
+            });
+        }
+        else{
+            alert.setAlertType(AlertType.ERROR);
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(ButtonType.OK);
+            alert.setContentText("Please select an entry from the table.");
+            alert.showAndWait();
         }
     }
 
