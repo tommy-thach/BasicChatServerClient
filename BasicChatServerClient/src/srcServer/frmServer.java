@@ -20,9 +20,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 
-public class frmServer {
+public class frmServer{
     private static final int PORT = 5045;
 
     serverConnection serverStart;
@@ -87,9 +89,18 @@ public class frmServer {
     
     private ObservableList<sqlDriver> data;
 
+    private serverConnection server;
+
     @FXML
-    void btnSendClicked(ActionEvent event) {
-        // serverMain.sendMessage(txtConsoleInput.getText());
+    void btnSendClicked(ActionEvent event) throws IOException {
+        sendConsoleMessage();
+    }
+
+    @FXML
+    void txtConsoleInputKeyPressed(KeyEvent event) throws Exception {
+        if(event.getCode().equals(KeyCode.ENTER)){
+            sendConsoleMessage();
+        }
     }
 
     @FXML
@@ -145,7 +156,6 @@ public class frmServer {
                             alert.setContentText(selectedUsername+"'s account has been permanently deleted.'");
                             alert.showAndWait();
                         }
-                        
                         catch(Exception e){
                         }
                     }
@@ -166,7 +176,7 @@ public class frmServer {
             ServerSocket serverSocket;
             try {
                 serverSocket = new ServerSocket(PORT);
-                serverConnection server = new serverConnection(serverSocket);
+                server = new serverConnection(serverSocket);
                 server.startServer();
                 Thread.sleep(1);
             } catch (IOException | InterruptedException e) {
@@ -174,6 +184,17 @@ public class frmServer {
             }
         }
     }
+
+    public void sendConsoleMessage() throws IOException{
+        for (clientHandler users : serverConnection.handlerList) {
+            users.getOut().write("[SERVER]: "+txtConsoleInput.getText());
+            users.getOut().newLine();
+            users.getOut().flush();
+        }
+        txtConsole.appendText("[SERVER]: "+txtConsoleInput.getText());
+        txtConsoleInput.clear();
+    }
+
     public void setBan(int isBanned){
         data = tvUserList.getSelectionModel().getSelectedItems();
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -306,12 +327,12 @@ public class frmServer {
     @FXML
     public void initialize() throws Exception {
         staticTxtConsole = txtConsole;
+        staticTxtConsoleInput = txtConsoleInput;
         serverThread serverThread = new serverThread();
         serverThread.setDaemon(true);
         serverThread.start();
         txtConsole.appendText("Server started.\nListening on port "+PORT+"..\n");
         loadData();
-
     }
 
 }

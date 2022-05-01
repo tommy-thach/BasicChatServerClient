@@ -2,6 +2,7 @@ package srcServer;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class clientHandler extends frmServer implements Runnable {
@@ -11,11 +12,23 @@ public class clientHandler extends frmServer implements Runnable {
     private BufferedWriter out;
     private String username;
 
+    public CopyOnWriteArrayList<clientHandler> getHandlerList(){
+        return handlerList;
+    }
+
+    public BufferedWriter getOut() {
+        return out;
+    }
+
+    public void setOut(BufferedWriter out) {
+        this.out = out;
+    }
+
     public clientHandler(Socket socket) {
         try {
             this.socket = socket;
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            setOut(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
             username = in.readLine();
             handlerList.add(this);
 
@@ -38,6 +51,7 @@ public class clientHandler extends frmServer implements Runnable {
                     staticTxtConsole.appendText(message + "\n");
                 }
                 System.out.println(handlerList.size());
+                
                 //System.out.printf("%-15s \t %-15s \t %-15s \t %s\n", "Name", "State", "Priority", "isDaemon");
                 //for (Thread t : threads) {
                 //    System.out.printf("%-15s \t %-15s \t %-15d \t %s\n", t.getName(), t.getState(), t.getPriority(),
@@ -55,9 +69,9 @@ public class clientHandler extends frmServer implements Runnable {
     public void sendMessage(String message) {
         for (clientHandler users : handlerList) {
             try {
-                users.out.write(message);
-                users.out.newLine();
-                users.out.flush();
+                users.getOut().write(message);
+                users.getOut().newLine();
+                users.getOut().flush();
                 
             } catch (Exception e) {
                 closeSockets();
@@ -78,11 +92,15 @@ public class clientHandler extends frmServer implements Runnable {
             if (in != null) {
                 in.close();
             }
-            if (out != null) {
-                out.close();
+            if (getOut() != null) {
+                getOut().close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<sqlDriver> handlerList() {
+        return null;
     }
 }
