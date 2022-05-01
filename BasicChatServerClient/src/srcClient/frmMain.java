@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -155,15 +157,23 @@ public class frmMain implements Runnable {
         }
     }
     
-    public void checkForCommands() throws IOException{
+    public void checkForCommands() throws Exception{
         String input=txtChatInput.getText();
 
         if(input.equals("/help")){
-            txtChat.appendText("-=[List of Commands]=-\n");
+            txtChat.appendText("-=[List of User Commands]=-\n");
             txtChat.appendText("[Command]\t\t[Usage]\n");
             txtChat.appendText("/help\t\t\tDisplays a list of all available commands\n");
             txtChat.appendText("/clear\t\t\tClears the chat screen\n");
             txtChat.appendText("/disconnect\t\tDisconnect yourself from the server\n");
+
+            if(sqlDriver.isAdmin(sqlDriver.returnUsername())){
+                txtChat.appendText("\n-=[List of Admin Commands]=-\n");
+                txtChat.appendText("[Command]\t\t\t[Usage]\n");
+                txtChat.appendText("/kick <username>\t\tKicks the specified user from the server.\n");
+                txtChat.appendText("/ban <username>\t\tBans the specified user from the server.\n");
+                txtChat.appendText("/unban <username>\tUnbans the specified user from the server.\n");
+            }
         }
         else if(input.equals("/clear")){
             txtChat.clear();
@@ -171,8 +181,24 @@ public class frmMain implements Runnable {
         else if(input.equals("/disconnect")){
             disconnect();
         }
+        else if(input.contains("/ban") && sqlDriver.isAdmin(sqlDriver.returnUsername())){
+            Connection conn = sqlDriver.sqlConnect();
+            Statement statement = conn.createStatement();
+            String username = input.substring(5,input.length());
+            statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '1' WHERE (`username` = '"+username+"')");
+            out.write("[SERVER]: "+username+" has been banned from the server.");
+            out.newLine();
+            out.flush();
+        }
+        else if(input.contains("/unban") && sqlDriver.isAdmin(sqlDriver.returnUsername())){
+            Connection conn = sqlDriver.sqlConnect();
+            Statement statement = conn.createStatement();
+            String username = input.substring(7,input.length());
+            statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '0' WHERE (`username` = '"+username+"')");
+            txtChat.appendText("[SERVER]: " + username + " has been unbanned from the server.\n");
+        }
         else{
-            txtChat.appendText("[Error] Invalid command! Enter /help for a list of available commands.");
+            txtChat.appendText("[Error] Invalid command! Enter /help for a list of available commands.\n");
         }
         //System.out.println(txtChatInput.getText());
     }

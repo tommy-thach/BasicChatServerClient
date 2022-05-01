@@ -191,7 +191,7 @@ public class frmServer{
             users.getOut().newLine();
             users.getOut().flush();
         }
-        txtConsole.appendText("[SERVER]: "+txtConsoleInput.getText());
+        txtConsole.appendText("[SERVER]: "+txtConsoleInput.getText()+"\n");
         txtConsoleInput.clear();
     }
 
