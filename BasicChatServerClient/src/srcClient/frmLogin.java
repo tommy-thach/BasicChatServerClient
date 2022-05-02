@@ -1,6 +1,6 @@
 package srcClient;
 
-import java.io.IOException;
+import java.io.*;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class frmLogin {
@@ -40,7 +41,7 @@ public class frmLogin {
     private CheckBox chbxRememberName;
 
     private Stage stage;
-    
+
     @FXML
     void btnRegister(ActionEvent event) throws IOException {
         Parent loader = FXMLLoader.load(getClass().getResource("resources/frmRegister.fxml"));
@@ -82,25 +83,26 @@ public class frmLogin {
 
     @FXML
     void txtUsernameKeyTyped(KeyEvent event) throws IOException{
-        if(chbxRememberName.isSelected() == true){
-            rememberUsername();
-        }
+
+    }
+
+    @FXML
+    void chbxRememberNameClicked(MouseEvent event) throws IOException {
+        rememberUsername();
     }
     public void rememberUsername() throws IOException{
-        /*BufferedWriter bw = new BufferedWriter(new FileWriter("BasicChatServerClient/src/srcClient/user/login.txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("./settings.ini"));
         if(chbxRememberName.isSelected()==true){
-            bw.write("True");
+            bw.write("Remember-Username:True");
             bw.newLine();
+            bw.write("Username:"+txtUsername.getText());
         }
         else{
-            bw.write("False");
+            bw.write("Remember-Username:False");
             bw.newLine();
         }
-        bw.write(txtUsername.getText());
         System.out.println("Closing buffer");
         bw.close();
-
-         */
     }
 
     public void signIn() throws Exception {
@@ -138,21 +140,24 @@ public class frmLogin {
     public void initialize() throws IOException{
         staticTxtUsername = txtUsername;
         staticTxtIP = txtIP;
-        /*BufferedReader br = new BufferedReader(new FileReader("BasicChatServerClient/src/srcClient/user/login.txt"));
+        File settings = new File("settings.ini");
+        if(!settings.exists()){
+            FileOutputStream fOutputStream = new FileOutputStream(settings,false);
+        }
+
+        BufferedReader br = new BufferedReader(new FileReader("./settings.ini"));
         String rememberNameIsChecked = br.readLine();
 
         if(rememberNameIsChecked != null){
-            if(rememberNameIsChecked.equals("True")){
+            if(rememberNameIsChecked.substring(rememberNameIsChecked.lastIndexOf(":")+1).equals("True")){
+                String username=br.readLine();
                 chbxRememberName.setSelected(true);
-                txtUsername.setText(br.readLine());
+                txtUsername.setText(username.substring(username.lastIndexOf(":")+1));
                 br.close();
             }
             else{
                 System.out.println("");
             }
         }
-
-         */
-        
     }
 }

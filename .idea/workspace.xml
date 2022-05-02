@@ -30,16 +30,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/tthac/OneDrive/Documents/GitHub/JavaFXLib/bin/vcruntime140_1.dll",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/tthac/OneDrive/Documents/GitHub/JavaFXLib/bin/vcruntime140_1.dll&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="srcClient" />
@@ -103,8 +103,8 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.clientLauncher" />
       <item itemvalue="Application.srcClient.clientApp" />
-      <item itemvalue="Application.srcClient.clientLauncher" />
       <item itemvalue="Application.srcServer.App" />
       <item itemvalue="Application.serverLauncher" />
     </list>
@@ -112,7 +112,6 @@
       <list>
         <item itemvalue="Application.srcClient.clientApp" />
         <item itemvalue="Application.srcServer.App" />
-        <item itemvalue="Application.srcClient.clientLauncher" />
         <item itemvalue="Application.serverLauncher" />
       </list>
     </recent_temporary>

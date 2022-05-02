@@ -1,17 +1,17 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="BasicChatServer">
     <output-path>$PROJECT_DIR$/out/artifacts/BasicChatServer</output-path>
-    <root id="archive" name="BasicChatServerClient.jar">
+    <root id="archive" name="BasicChatServer.jar">
       <element id="module-output" name="BasicChatServerClient" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.controls.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.fxml.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.media.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx-swt.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.base.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.swing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.fxml.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.graphics.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.controls.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.web.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../../../../Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.28.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx-swt.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.media.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.swing.jar" path-in-jar="/" />
       <element id="file-copy" path="$PROJECT_DIR$/../JavaFXLib/bin/api-ms-win-core-console-l1-1-0.dll" />
       <element id="file-copy" path="$PROJECT_DIR$/../JavaFXLib/bin/api-ms-win-core-console-l1-2-0.dll" />
       <element id="file-copy" path="$PROJECT_DIR$/../JavaFXLib/bin/api-ms-win-core-datetime-l1-1-0.dll" />

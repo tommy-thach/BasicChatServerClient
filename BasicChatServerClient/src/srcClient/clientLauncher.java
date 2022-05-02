@@ -33,7 +33,7 @@ public class clientLauncher extends Application {
     public void stop() throws IOException{
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
         //loader.load();
-        BufferedReader br = new BufferedReader(new FileReader("src/srcClient/user/login.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("./settings.ini"));
         String rememberUsernameIsChecked = br.readLine();
         System.out.println(rememberUsernameIsChecked.equals("True"));
         
