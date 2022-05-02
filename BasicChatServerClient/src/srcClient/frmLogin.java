@@ -1,9 +1,5 @@
 package srcClient;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -17,6 +13,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
@@ -28,7 +25,11 @@ public class frmLogin {
     private TextField txtUsername;
 
     public static TextField staticTxtUsername;
-    
+
+    @FXML
+    private TextField txtIP;
+
+    public static TextField staticTxtIP;
     @FXML
     private CheckBox chbxAutoSignIn;
 
@@ -51,31 +52,29 @@ public class frmLogin {
 
     @FXML
     void btnSignIn(ActionEvent event) throws Exception {
-        Alert error = new Alert(AlertType.ERROR);
-        error.setHeaderText(null);
+        signIn();
+    }
 
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-
-        if(sqlDriver.isBanned(username)){
-            error.setContentText("You are banned from the server.");
-            error.showAndWait();
-        }
-        else{
-            if(sqlDriver.canLogin(username,password)){
-                Parent loader = FXMLLoader.load(getClass().getResource("resources/frmMain.fxml"));
-                Node node = (Node) event.getSource();
-                stage = (Stage)node.getScene().getWindow();
-                stage.setScene(new Scene(loader));
-                stage.show();
-            }
-            else{
-                error.setContentText("Invalid username or password.");
-                error.showAndWait();
-            }
+    @FXML
+    void txtIPKeyPressed(KeyEvent event) throws Exception {
+        if(event.getCode().equals(KeyCode.ENTER)){
+            signIn();
         }
     }
 
+    @FXML
+    void txtPasswordKeyPressed(KeyEvent event) throws Exception{
+        if(event.getCode().equals(KeyCode.ENTER)){
+            signIn();
+        }
+    }
+
+    @FXML
+    void txtUsernameKeyPressed(KeyEvent event) throws Exception {
+        if(event.getCode().equals(KeyCode.ENTER)){
+            signIn();
+        }
+    }
     @FXML
     void chbxAutoSignInClicked(ActionEvent event) throws Exception{
         //System.out.println(returnUsername());
@@ -87,9 +86,8 @@ public class frmLogin {
             rememberUsername();
         }
     }
-
     public void rememberUsername() throws IOException{
-        BufferedWriter bw = new BufferedWriter(new FileWriter("BasicChatServerClient/src/srcClient/user/login.txt"));
+        /*BufferedWriter bw = new BufferedWriter(new FileWriter("BasicChatServerClient/src/srcClient/user/login.txt"));
         if(chbxRememberName.isSelected()==true){
             bw.write("True");
             bw.newLine();
@@ -101,13 +99,46 @@ public class frmLogin {
         bw.write(txtUsername.getText());
         System.out.println("Closing buffer");
         bw.close();
+
+         */
     }
 
+    public void signIn() throws Exception {
+        Alert error = new Alert(AlertType.ERROR);
+        error.setHeaderText(null);
+
+        String username = txtUsername.getText();
+        String password = txtPassword.getText();
+
+        if(sqlDriver.isBanned(username)){
+            error.setContentText("You are banned from the server.");
+            error.showAndWait();
+        }
+        else{
+            if(txtIP.getText().isEmpty()){
+                error.setContentText("Please enter a valid IP and port address.");
+                error.showAndWait();
+            }
+            else{
+                if(sqlDriver.canLogin(username,password)){
+                    Parent loader = FXMLLoader.load(getClass().getResource("resources/frmMain.fxml"));
+                    Node node = (Node) txtUsername.getParent();
+                    stage = (Stage)node.getScene().getWindow();
+                    stage.setScene(new Scene(loader));
+                    stage.show();
+                }
+                else{
+                    error.setContentText("Invalid username or password.");
+                    error.showAndWait();
+                }
+            }
+        }
+    }
     @FXML
     public void initialize() throws IOException{
         staticTxtUsername = txtUsername;
-
-        BufferedReader br = new BufferedReader(new FileReader("BasicChatServerClient/src/srcClient/user/login.txt"));
+        staticTxtIP = txtIP;
+        /*BufferedReader br = new BufferedReader(new FileReader("BasicChatServerClient/src/srcClient/user/login.txt"));
         String rememberNameIsChecked = br.readLine();
 
         if(rememberNameIsChecked != null){
@@ -120,6 +151,8 @@ public class frmLogin {
                 System.out.println("");
             }
         }
+
+         */
         
     }
 }

@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,8 +30,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class frmMain implements Runnable {
-    private static final String IP_ADDR = "localhost";
-    private static final int PORT = 5045;
 
     @FXML
     private DatePicker dpDatePicker;
@@ -58,8 +58,7 @@ public class frmMain implements Runnable {
     BufferedReader in = null;
     BufferedWriter out = null;
     BufferedReader br = null;
-    String message;
-    Boolean userConnected = false;
+    String message, ADDR, IP, PORT;
 
     @FXML
     public void exitApplication(ActionEvent event) {
@@ -88,10 +87,13 @@ public class frmMain implements Runnable {
     @FXML
     public void initialize() throws UnknownHostException, IOException {
         staticTxtChatInput = txtChatInput;
+        ADDR = frmLogin.staticTxtIP.getText();
+        IP = ADDR.substring(0,ADDR.lastIndexOf(":"));
+        PORT = ADDR.substring(ADDR.lastIndexOf(":")+1);
         lblWelcome.setText("Welcome " + sqlDriver.returnUsername());
         lblCurrDate.setText("Today is: " + getCurrDate());
 
-        socket = new Socket(IP_ADDR,PORT);
+        socket = new Socket(IP, Integer.parseInt(PORT));
         
         connect();
         System.out.println("CONNECT() RAN");
@@ -100,8 +102,7 @@ public class frmMain implements Runnable {
 
     public void connect() throws UnknownHostException, IOException {
         txtChat.appendText("Connecting..\n");
-
-        txtChat.appendText("Connected to " + IP_ADDR + " on port " + PORT + "!\n");
+        txtChat.appendText("Connected to " + IP + " on port " + PORT + "!\n");
         System.out.println("Socket created");
 
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -159,6 +160,10 @@ public class frmMain implements Runnable {
     
     public void checkForCommands() throws Exception{
         String input=txtChatInput.getText();
+        String username;
+        Connection conn = sqlDriver.sqlConnect();
+        Statement statement = conn.createStatement();
+        PreparedStatement getUsername;
 
         if(input.equals("/help")){
             txtChat.appendText("-=[List of User Commands]=-\n");
@@ -181,21 +186,33 @@ public class frmMain implements Runnable {
         else if(input.equals("/disconnect")){
             disconnect();
         }
-        else if(input.contains("/ban") && sqlDriver.isAdmin(sqlDriver.returnUsername())){
-            Connection conn = sqlDriver.sqlConnect();
-            Statement statement = conn.createStatement();
-            String username = input.substring(5,input.length());
-            statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '1' WHERE (`username` = '"+username+"')");
-            out.write("[SERVER]: "+username+" has been banned from the server.");
-            out.newLine();
-            out.flush();
+        else if(input.contains("/ban") && input.length()>5 && sqlDriver.isAdmin(sqlDriver.returnUsername())){
+            username = input.substring(5);
+            getUsername = conn.prepareStatement("SELECT username FROM testtbl WHERE username = '"+username+"'");
+            ResultSet rs = getUsername.executeQuery();
+            if(rs.next()){
+                statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '1' WHERE (`username` = '"+username+"')");
+                out.write("[SERVER]: "+rs.getString("Username")+" has been banned from the server.");
+                out.newLine();
+                out.flush();
+            }
+            else{
+                txtChat.appendText("[ERROR]: The specified user '"+username+"' does not exist.\n");
+            }
         }
-        else if(input.contains("/unban") && sqlDriver.isAdmin(sqlDriver.returnUsername())){
-            Connection conn = sqlDriver.sqlConnect();
-            Statement statement = conn.createStatement();
-            String username = input.substring(7,input.length());
-            statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '0' WHERE (`username` = '"+username+"')");
-            txtChat.appendText("[SERVER]: " + username + " has been unbanned from the server.\n");
+        else if(input.contains("/unban") && input.length()>7 && sqlDriver.isAdmin(sqlDriver.returnUsername())){
+            username = input.substring(7);
+            getUsername = conn.prepareStatement("SELECT username FROM testtbl WHERE username = '"+username+"'");
+            ResultSet rs = getUsername.executeQuery();
+            if(rs.next()){
+                statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '0' WHERE (`username` = '"+username+"')");
+                out.write("[SERVER]: "+rs.getString("Username")+" has been unbanned from the server.");
+                out.newLine();
+                out.flush();
+            }
+            else{
+                txtChat.appendText("[ERROR]: The specified user '"+username+"' does not exist.\n");
+            }
         }
         else{
             txtChat.appendText("[Error] Invalid command! Enter /help for a list of available commands.\n");

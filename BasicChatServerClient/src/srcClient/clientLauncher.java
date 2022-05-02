@@ -16,10 +16,12 @@ public class clientLauncher extends Application {
     frmMain main;
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
         root = loader.load();
         Scene scene = new Scene(root);
+        sqlDriver sql = new sqlDriver();
+        sql.createTable();
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Basic Chat Client");

@@ -4,11 +4,8 @@ import java.sql.*;
 
 public class sqlDriver {
     public static String tempUsername;
-    public static void main(String args[]) throws Exception{
-        createTable();
-    }
 
-    public static void createTable() throws Exception{
+    public void createTable() throws Exception{
         try{
             Connection conn = sqlConnect();
             PreparedStatement cStatement = conn.prepareStatement("CREATE TABLE IF NOT EXISTS testTbl(id int NOT NULL AUTO_INCREMENT, username varchar(255) UNIQUE, password varchar(255), email varchar(255) UNIQUE, dateOfBirth varchar(255), gender varchar(255), isBanned varchar(255), isAdmin varchar(255), PRIMARY KEY(id))");
@@ -94,7 +91,7 @@ public class sqlDriver {
             }
         }
         catch(Exception e){}
-        
+
         return false;
     }
 
@@ -138,9 +135,9 @@ public class sqlDriver {
 
     public static Connection sqlConnect() throws Exception{
         String driver = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/testdb";
-        String sqlUser = "root";
-        String sqlPass = "root";
+        String url = "jdbc:mysql://192.168.1.130:3306/testdb";
+        String sqlUser = "user";
+        String sqlPass = "user";
 
         try{
             Class.forName(driver);

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="srcClient.frmLogin">
+   <children>
+      <Text layoutX="183.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
+      <Text layoutX="165.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
+      <TextField fx:id="txtUsername" layoutX="226.0" layoutY="130.0" onKeyPressed="#txtUsernameKeyPressed" onKeyTyped="#txtUsernameKeyTyped" />
+      <PasswordField fx:id="txtPassword" layoutX="226.0" layoutY="163.0" onKeyPressed="#txtPasswordKeyPressed" />
+      <Button layoutX="226.0" layoutY="230.0" mnemonicParsing="false" onAction="#btnSignIn" prefHeight="25.0" prefWidth="149.0" text="Sign In" />
+      <Button layoutX="226.0" layoutY="263.0" mnemonicParsing="false" onAction="#btnRegister" prefHeight="25.0" prefWidth="149.0" text="Register" />
+      <CheckBox fx:id="chbxRememberName" layoutX="226.0" layoutY="296.0" mnemonicParsing="false" text="Remember Name" />
+      <CheckBox fx:id="chbxAutoSignIn" layoutX="226.0" layoutY="319.0" mnemonicParsing="false" onAction="#chbxAutoSignInClicked" text="Automatically Sign In" />
+      <TextField fx:id="txtIP" layoutX="226.0" layoutY="196.0" onKeyPressed="#txtIPKeyPressed" text="127.0.0.1:5045" />
+      <Label layoutX="178.0" layoutY="200.0" text="IP/Port:" />
+   </children>
+</AnchorPane>
