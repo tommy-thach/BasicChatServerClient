@@ -249,7 +249,7 @@ public class frmMain implements Runnable {
     @Override
     public void run() {
         String message;
-
+        
         while (!socket.isClosed()) {
             try {
                 message = in.readLine();

@@ -18,7 +18,7 @@
       <Button layoutX="226.0" layoutY="263.0" mnemonicParsing="false" onAction="#btnRegister" prefHeight="25.0" prefWidth="149.0" text="Register" />
       <CheckBox fx:id="chbxRememberName" layoutX="226.0" layoutY="296.0" mnemonicParsing="false" onMouseClicked="#chbxRememberNameClicked" text="Remember Name" />
       <CheckBox fx:id="chbxAutoSignIn" layoutX="226.0" layoutY="319.0" mnemonicParsing="false" onAction="#chbxAutoSignInClicked" text="Automatically Sign In" />
-      <TextField fx:id="txtIP" layoutX="226.0" layoutY="196.0" onKeyPressed="#txtIPKeyPressed" text="127.0.0.1:5045" />
+      <TextField fx:id="txtIP" layoutX="226.0" layoutY="196.0" onKeyPressed="#txtIPKeyPressed" text="127.0.0.1:7777" />
       <Label layoutX="178.0" layoutY="200.0" text="IP/Port:" />
    </children>
 </AnchorPane>

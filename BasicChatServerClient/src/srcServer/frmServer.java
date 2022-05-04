@@ -100,7 +100,7 @@ public class frmServer{
     @FXML
     private CheckBox chbxAutoStart;
 
-    public static CheckBox staticChbxAutoStart;
+    public static Boolean staticChBxAutoStartSelected;
 
     private ObservableList<sqlDriver> data;
     private serverConnection server;
@@ -130,6 +130,7 @@ public class frmServer{
     @FXML
     void btnStartServerClicked(ActionEvent event) {
         if(!txtPort.getText().isEmpty()){
+            PORT = Integer.parseInt(txtPort.getText());
             startServer();
         }
         else{
@@ -153,13 +154,14 @@ public class frmServer{
     @FXML
     void chbxAutoStartClicked(MouseEvent event) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter("./server.ini"));
+        staticChBxAutoStartSelected=chbxAutoStart.isSelected();
         if(chbxAutoStart.isSelected()==true){
-            bw.write("Auto-Start:True");
+            bw.write("Auto-Start:true");
             bw.newLine();
             bw.write("Port:"+txtPort.getText());
         }
         else{
-            bw.write("Auto-Start:False");
+            bw.write("Auto-Start:false");
             bw.newLine();
             bw.write("Port:"+txtPort.getText());
         }
@@ -249,7 +251,6 @@ public class frmServer{
     public void startServer(){
         if(!serverStarted){
             serverStarted = true;
-            PORT = Integer.parseInt(txtPort.getText());
             txtConsole.appendText("Starting server..\n");
             serverThread = new serverThread();
             serverThread.setDaemon(true);
@@ -406,26 +407,38 @@ public class frmServer{
         staticTxtConsole = txtConsole;
         staticTxtConsoleInput = txtConsoleInput;
         staticTxtPort=txtPort;
+        
         loadData();
         
         File serverFile = new File("server.ini");
-        if(!serverFile.exists()){
+        if(!serverFile.exists()||serverFile.length()==0){
             try (FileOutputStream fOutputStream = new FileOutputStream(serverFile,false)) {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(serverFile));
+                bw.write("Auto-Start:false");
+                bw.newLine();
+                bw.write("Port:7777");
+                bw.close();
             }
         }
         
-        BufferedReader br = new BufferedReader(new FileReader("./server.ini"));
+        BufferedReader br = new BufferedReader(new FileReader(serverFile));
+
         String autoStartServer = br.readLine();
-   
+        staticChBxAutoStartSelected = Boolean.parseBoolean(autoStartServer.substring(autoStartServer.lastIndexOf(":")+1));
+
+        String port=br.readLine().substring(5);
+        
         if(autoStartServer != null){
-            if(autoStartServer.substring(autoStartServer.lastIndexOf(":")+1).equals("True")){
+            if(autoStartServer.substring(autoStartServer.lastIndexOf(":")+1).equals("true")){
                 chbxAutoStart.setSelected(true);
+                PORT = Integer.parseInt(port);
                 startServer();
             }
 
-            String port=br.readLine();
-            txtPort.setText(port.substring(port.lastIndexOf(":")+1));
+            txtPort.setText(port);
             br.close();
+
+            
         }
         
     }

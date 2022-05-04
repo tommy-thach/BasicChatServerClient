@@ -2,6 +2,9 @@
   <artifact type="jar" name="BasicChatClient">
     <output-path>$PROJECT_DIR$/out/artifacts/BasicChatClient</output-path>
     <root id="archive" name="BasicChatClient.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/BasicChatServerClient/src/srcClient/META-INF/MANIFEST.MF" />
+      </element>
       <element id="module-output" name="BasicChatServerClient" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx.media.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../JavaFXLib/javafx-swt.jar" path-in-jar="/" />

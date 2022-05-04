@@ -44,6 +44,8 @@ public class frmLogin {
     @FXML
     private CheckBox chbxRememberName;
 
+    public static boolean staticChBxRememberNameSelected;
+
     private Stage stage;
 
     private static Socket socket=null;
@@ -95,15 +97,16 @@ public class frmLogin {
     @FXML
     void chbxRememberNameClicked(MouseEvent event) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter("./settings.ini"));
+        staticChBxRememberNameSelected = chbxRememberName.isSelected();
         if(chbxRememberName.isSelected()==true){
-            bw.write("Remember-Username:True");
+            bw.write("Remember-Username:true");
             bw.newLine();
             bw.write("Username:"+txtUsername.getText());
             bw.newLine();
             bw.write("IP-Address:"+txtIP.getText());
         }
         else{
-            bw.write("Remember-Username:False");
+            bw.write("Remember-Username:false");
             bw.newLine();
             bw.write("Username:"+txtUsername.getText());
             bw.newLine();
@@ -162,28 +165,38 @@ public class frmLogin {
 
     @FXML
     public void initialize() throws IOException{
+        File settingsFile = new File("settings.ini");
+        String ipAddress=null;
+
         staticTxtUsername = txtUsername;
         staticTxtIP = txtIP;
-        File settings = new File("settings.ini");
-        if(!settings.exists()){
-            try (FileOutputStream fOutputStream = new FileOutputStream(settings,false)) {
+
+        if(!settingsFile.exists()||settingsFile.length()==0){
+            try (FileOutputStream fOutputStream = new FileOutputStream(settingsFile,false)) {
+                BufferedWriter bw = new BufferedWriter(new FileWriter("./settings.ini"));
+                bw.write("Remember-Username:");
+                bw.newLine();
+                bw.write("Username:");
+                bw.newLine();
+                bw.write("IP-Address:127.0.0.1:7777");
+                bw.close();
             }
         }
+        else{
+            ipAddress = Files.readAllLines(Paths.get("./settings.ini")).get(2);
+            txtIP.setText(ipAddress.substring(11));
+        }
 
-        BufferedReader br = new BufferedReader(new FileReader("./settings.ini"));
+        BufferedReader br = new BufferedReader(new FileReader(settingsFile));
         String rememberNameIsChecked = br.readLine();
-
+        staticChBxRememberNameSelected = Boolean.parseBoolean(rememberNameIsChecked.substring(rememberNameIsChecked.lastIndexOf(":")+1));
         if(rememberNameIsChecked != null){
-            if(rememberNameIsChecked.substring(rememberNameIsChecked.lastIndexOf(":")+1).equals("True")){
+            if(rememberNameIsChecked.substring(rememberNameIsChecked.lastIndexOf(":")+1).equals("true")){
                 String username=br.readLine();
                 chbxRememberName.setSelected(true);
                 txtUsername.setText(username.substring(username.lastIndexOf(":")+1));
                 br.close();
             }
         }
-        String ipAddress = Files.readAllLines(Paths.get("./settings.ini")).get(2);
-        txtIP.setText(ipAddress.substring(11));
-        
-
     }
 }
