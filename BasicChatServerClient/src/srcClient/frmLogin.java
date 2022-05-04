@@ -2,6 +2,8 @@ package srcClient;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,6 +34,7 @@ public class frmLogin {
     private TextField txtIP;
 
     public static TextField staticTxtIP;
+
     @FXML
     private CheckBox chbxAutoSignIn;
 
@@ -96,10 +99,15 @@ public class frmLogin {
             bw.write("Remember-Username:True");
             bw.newLine();
             bw.write("Username:"+txtUsername.getText());
+            bw.newLine();
+            bw.write("IP-Address:"+txtIP.getText());
         }
         else{
             bw.write("Remember-Username:False");
             bw.newLine();
+            bw.write("Username:"+txtUsername.getText());
+            bw.newLine();
+            bw.write("IP-Address:"+txtIP.getText());
         }
         System.out.println("Closing buffer");
         bw.close();
@@ -172,9 +180,10 @@ public class frmLogin {
                 txtUsername.setText(username.substring(username.lastIndexOf(":")+1));
                 br.close();
             }
-            else{
-                System.out.println("");
-            }
         }
+        String ipAddress = Files.readAllLines(Paths.get("./settings.ini")).get(2);
+        txtIP.setText(ipAddress.substring(11));
+        
+
     }
 }

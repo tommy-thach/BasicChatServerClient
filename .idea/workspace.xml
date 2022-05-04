@@ -45,23 +45,9 @@
       <recent name="srcClient" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.serverLauncher">
-    <configuration name="clientLauncher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="srcClient.clientLauncher" />
-      <module name="BasicChatServerClient" />
-      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\tthac\OneDrive\Documents\GitHub\JavaFXLib\lib&quot; --add-modules=javafx.controls,javafx.fxml" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="srcClient.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="serverLauncher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="srcServer.serverLauncher" />
+  <component name="RunManager" selected="Application.srcServer.serverLauncher">
+    <configuration name="serverApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="srcServer.serverApp" />
       <module name="BasicChatServerClient" />
       <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\tthac\OneDrive\Documents\GitHub\JavaFXLib\lib&quot; --add-modules=javafx.controls,javafx.fxml" />
       <extension name="coverage">
@@ -75,7 +61,7 @@
       </method>
     </configuration>
     <configuration name="srcClient.clientApp" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="srcClient.App" />
+      <option name="MAIN_CLASS_NAME" value="srcClient.clientApp" />
       <module name="BasicChatServerClient" />
       <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\tthac\OneDrive\Documents\GitHub\JavaFXLib\lib&quot; --add-modules=javafx.controls,javafx.fxml" />
       <extension name="coverage">
@@ -88,8 +74,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="srcServer.App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="srcServer.App" />
+    <configuration name="srcClient.clientLauncher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="srcClient.clientLauncher" />
+      <module name="BasicChatServerClient" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\tthac\OneDrive\Documents\GitHub\JavaFXLib\lib&quot; --add-modules=javafx.controls,javafx.fxml" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="srcClient.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="srcServer.serverLauncher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="srcServer.serverLauncher" />
       <module name="BasicChatServerClient" />
       <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\tthac\OneDrive\Documents\GitHub\JavaFXLib\lib&quot; --add-modules=javafx.controls,javafx.fxml" />
       <extension name="coverage">
@@ -103,15 +103,15 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.clientLauncher" />
+      <item itemvalue="Application.serverApp" />
+      <item itemvalue="Application.srcServer.serverLauncher" />
       <item itemvalue="Application.srcClient.clientApp" />
-      <item itemvalue="Application.srcServer.App" />
-      <item itemvalue="Application.serverLauncher" />
+      <item itemvalue="Application.srcClient.clientLauncher" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.serverLauncher" />
-        <item itemvalue="Application.srcServer.App" />
+        <item itemvalue="Application.srcServer.serverLauncher" />
+        <item itemvalue="Application.serverApp" />
         <item itemvalue="Application.srcClient.clientApp" />
       </list>
     </recent_temporary>
