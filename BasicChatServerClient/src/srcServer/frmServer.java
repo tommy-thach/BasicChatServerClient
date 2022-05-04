@@ -1,5 +1,11 @@
 package srcServer;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.sql.Connection;
@@ -11,22 +17,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 
 public class frmServer{
-    private static final int PORT = 5045;
-
     serverConnection serverStart;
 
     @FXML
@@ -41,6 +40,11 @@ public class frmServer{
     private TextField txtConsoleInput;
 
     public static TextField staticTxtConsoleInput;
+
+    @FXML
+    private TextField txtPort;
+
+    public static TextField staticTxtPort;
 
     @FXML
     private TableView<sqlDriver> tvUserList;
@@ -86,10 +90,82 @@ public class frmServer{
 
     @FXML
     private Button btnRefreshData;
-    
-    private ObservableList<sqlDriver> data;
 
+    @FXML
+    private Button btnStartServer;
+
+    @FXML
+    private Button btnStopServer;
+
+    @FXML
+    private CheckBox chbxAutoStart;
+
+    public static CheckBox staticChbxAutoStart;
+
+    private ObservableList<sqlDriver> data;
     private serverConnection server;
+    private int PORT;
+    private boolean serverStarted=false;
+    private serverThread serverThread;
+
+    public class serverThread extends Thread {
+        ServerSocket serverSocket;
+        public void run() {
+                try {
+                    serverSocket = new ServerSocket(PORT);
+                    server = new serverConnection(serverSocket);
+                    System.out.println(this.getName() + " started.");
+                    server.startServer();
+                } catch (IOException e) {
+                    server.closeSockets();
+                }
+        }
+
+        public void stopServer() throws IOException{
+            System.out.println(this.getName() + " stopped.");
+            server.stopServer();
+        }
+    }
+
+    @FXML
+    void btnStartServerClicked(ActionEvent event) {
+        if(!txtPort.getText().isEmpty()){
+            startServer();
+        }
+        else{
+            txtConsole.appendText("[ERROR]: Please enter a port before starting the server.\n");
+        }
+    }
+
+    @FXML
+    void btnStopServerClicked(ActionEvent event) throws IOException {
+        
+        serverThread.stopServer();
+        if(serverStarted==true){
+            serverStarted=false;
+            txtConsole.appendText("[SERVER]: Server stopped.\n");
+        }
+        else{
+            txtConsole.appendText("[ERROR]: The server is currently not running!\n");
+        }
+    }
+
+    @FXML
+    void chbxAutoStartClicked(MouseEvent event) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("./server.ini"));
+        if(chbxAutoStart.isSelected()==true){
+            bw.write("Auto-Start:True");
+            bw.newLine();
+            bw.write("Port:"+txtPort.getText());
+        }
+        else{
+            bw.write("Auto-Start:False");
+            bw.newLine();
+            bw.write("Port:"+txtPort.getText());
+        }
+        System.out.println("Closing buffer");
+        bw.close();
+    }
 
     @FXML
     void btnSendClicked(ActionEvent event) throws IOException {
@@ -127,7 +203,6 @@ public class frmServer{
     void btnRefreshDataClicked(ActionEvent event) throws Exception{
         loadData();
     }
-
     @FXML
     void btnDeleteAccClicked(ActionEvent event) throws Exception {
         data = tvUserList.getSelectionModel().getSelectedItems();
@@ -171,17 +246,19 @@ public class frmServer{
         }
     }
 
-    public class serverThread extends Thread {
-        public void run() {
-            ServerSocket serverSocket;
-            try {
-                serverSocket = new ServerSocket(PORT);
-                server = new serverConnection(serverSocket);
-                server.startServer();
-                Thread.sleep(1);
-            } catch (IOException | InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+    public void startServer(){
+        if(!serverStarted){
+            serverStarted = true;
+            PORT = Integer.parseInt(txtPort.getText());
+            txtConsole.appendText("Starting server..\n");
+            serverThread = new serverThread();
+            serverThread.setDaemon(true);
+            serverThread.start();
+            System.out.println(serverThread.getName());
+            txtConsole.appendText("Server started.\nListening on port "+PORT+"..\n");
+        }
+        else{
+            txtConsole.appendText("[ERROR]: The server is currently running!\n");
         }
     }
 
@@ -328,11 +405,29 @@ public class frmServer{
     public void initialize() throws Exception {
         staticTxtConsole = txtConsole;
         staticTxtConsoleInput = txtConsoleInput;
-        serverThread serverThread = new serverThread();
-        serverThread.setDaemon(true);
-        serverThread.start();
-        txtConsole.appendText("Server started.\nListening on port "+PORT+"..\n");
+        staticTxtPort=txtPort;
         loadData();
+        
+        File serverFile = new File("server.ini");
+        if(!serverFile.exists()){
+            try (FileOutputStream fOutputStream = new FileOutputStream(serverFile,false)) {
+            }
+        }
+        
+        BufferedReader br = new BufferedReader(new FileReader("./server.ini"));
+        String autoStartServer = br.readLine();
+   
+        if(autoStartServer != null){
+            if(autoStartServer.substring(autoStartServer.lastIndexOf(":")+1).equals("True")){
+                chbxAutoStart.setSelected(true);
+                startServer();
+            }
+
+            String port=br.readLine();
+            txtPort.setText(port.substring(port.lastIndexOf(":")+1));
+            br.close();
+        }
+        
     }
 
 }

@@ -45,7 +45,7 @@
       <recent name="srcClient" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.srcClient.clientApp">
+  <component name="RunManager" selected="Application.serverLauncher">
     <configuration name="clientLauncher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="srcClient.clientLauncher" />
       <module name="BasicChatServerClient" />
@@ -110,9 +110,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.srcClient.clientApp" />
-        <item itemvalue="Application.srcServer.App" />
         <item itemvalue="Application.serverLauncher" />
+        <item itemvalue="Application.srcServer.App" />
+        <item itemvalue="Application.srcClient.clientApp" />
       </list>
     </recent_temporary>
   </component>

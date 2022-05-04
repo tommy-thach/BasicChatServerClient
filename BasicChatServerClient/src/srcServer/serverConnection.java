@@ -1,13 +1,17 @@
 package srcServer;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class serverConnection{
 
+    private Thread thread;
     private final ServerSocket serverSocket;
-    Socket socket;
+    private Socket socket;
     public static CopyOnWriteArrayList<clientHandler> handlerList;
+    private static ArrayList<Socket> socketList = new ArrayList<Socket>();
 
     public serverConnection(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -17,18 +21,31 @@ public class serverConnection{
         try {
             while (!serverSocket.isClosed()) {
                 socket = serverSocket.accept();
+                socketList.add(socket);
+                System.out.println(socketList);
                 System.out.println("A user has successfully connected.");
                 clientHandler handler = new clientHandler(socket);
                 handlerList = handler.getHandlerList();
-                Thread thread = new Thread(handler);
+                thread = new Thread(handler);
                 thread.start();
             }
         } catch (Exception e) {
             closeSockets();
-            Thread.currentThread().interrupt();
             return;
         }
     }
+
+    public void stopServer() throws IOException{
+        serverSocket.close();
+
+        for(Socket socket : socketList){
+            if(socket!=null){
+                socket.close();
+            }
+        }
+        
+    }
+
 
     public void closeSockets() {
         try {

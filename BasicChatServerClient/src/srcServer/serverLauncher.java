@@ -1,6 +1,11 @@
 package srcServer;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +32,16 @@ public class serverLauncher extends Application {
 
     @Override
     public void stop() throws IOException{
-        //What happens after program close
+        List<String> serverSettings = new ArrayList<>(Files.readAllLines(Paths.get("./server.ini"), StandardCharsets.UTF_8));
+
+        for (int i = 0; i < serverSettings.size(); i++) {
+            if (serverSettings.get(i).contains("Port:")) {
+                serverSettings.set(i, "Port:"+frmServer.staticTxtPort.getText());
+                break;
+            }
+        }
+
+        Files.write(Paths.get("./server.ini"), serverSettings, StandardCharsets.UTF_8);
     }
     
     public static void main(String[] args) {

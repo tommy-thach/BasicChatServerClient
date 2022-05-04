@@ -54,11 +54,10 @@ public class frmMain implements Runnable {
 
     public static TextField staticTxtChatInput;
 
-    Socket socket = null;
-    BufferedReader in = null;
-    BufferedWriter out = null;
-    BufferedReader br = null;
-    String message, ADDR, IP, PORT;
+    private static Socket socket = null;
+    private BufferedReader in = null;
+    private BufferedWriter out = null;
+    private String ADDR, IP, PORT;
 
     @FXML
     public void exitApplication(ActionEvent event) {
@@ -85,7 +84,7 @@ public class frmMain implements Runnable {
     }
 
     @FXML
-    public void initialize() throws UnknownHostException, IOException {
+    public void initialize() throws IOException{
         staticTxtChatInput = txtChatInput;
         ADDR = frmLogin.staticTxtIP.getText();
         IP = ADDR.substring(0,ADDR.lastIndexOf(":"));
@@ -93,11 +92,12 @@ public class frmMain implements Runnable {
         lblWelcome.setText("Welcome " + sqlDriver.returnUsername());
         lblCurrDate.setText("Today is: " + getCurrDate());
 
-        socket = new Socket(IP, Integer.parseInt(PORT));
-        
+        socket = frmLogin.getSocket();
         connect();
         System.out.println("CONNECT() RAN");
         System.out.println("SOCKET IS CONNECTED: " + socket.isConnected());
+
+        
     }
 
     public void connect() throws UnknownHostException, IOException {
@@ -257,7 +257,6 @@ public class frmMain implements Runnable {
                 System.out.println(message);
 
             } catch (IOException e) {
-                // Close everything gracefully.
                 closeSockets();
                 Thread.currentThread().interrupt();
                 break;

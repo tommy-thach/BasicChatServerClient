@@ -1,6 +1,7 @@
 package srcClient;
 
 import java.io.*;
+import java.net.Socket;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,6 +42,8 @@ public class frmLogin {
     private CheckBox chbxRememberName;
 
     private Stage stage;
+
+    private static Socket socket=null;
 
     @FXML
     void btnRegister(ActionEvent event) throws IOException {
@@ -88,9 +91,6 @@ public class frmLogin {
 
     @FXML
     void chbxRememberNameClicked(MouseEvent event) throws IOException {
-        rememberUsername();
-    }
-    public void rememberUsername() throws IOException{
         BufferedWriter bw = new BufferedWriter(new FileWriter("./settings.ini"));
         if(chbxRememberName.isSelected()==true){
             bw.write("Remember-Username:True");
@@ -105,44 +105,61 @@ public class frmLogin {
         bw.close();
     }
 
-    public void signIn() throws Exception {
+    public void signIn() {
         Alert error = new Alert(AlertType.ERROR);
         error.setHeaderText(null);
 
         String username = txtUsername.getText();
         String password = txtPassword.getText();
-
-        if(sqlDriver.isBanned(username)){
-            error.setContentText("You are banned from the server.");
-            error.showAndWait();
-        }
-        else{
-            if(txtIP.getText().isEmpty()){
-                error.setContentText("Please enter a valid IP and port address.");
-                error.showAndWait();
-            }
-            else{
-                if(sqlDriver.canLogin(username,password)){
-                    Parent loader = FXMLLoader.load(getClass().getResource("resources/frmMain.fxml"));
-                    Node node = (Node) txtUsername.getParent();
-                    stage = (Stage)node.getScene().getWindow();
-                    stage.setScene(new Scene(loader));
-                    stage.show();
-                }
-                else{
-                    error.setContentText("Invalid username or password.");
+        String IP = txtIP.getText().substring(0,txtIP.getText().lastIndexOf(":"));
+        String PORT = txtIP.getText().substring(txtIP.getText().lastIndexOf(":")+1);
+        try{
+            socket = new Socket(IP,Integer.parseInt(PORT));
+            System.out.println(socket);
+            if(socket!=null){
+                if(sqlDriver.isBanned(username)){
+                    error.setContentText("You are banned from the server.");
                     error.showAndWait();
                 }
+                else{
+                    if(txtIP.getText().isEmpty()){
+                        error.setContentText("Please enter a valid IP and port address.");
+                        error.showAndWait();
+                    }
+                    else{
+                        if(sqlDriver.canLogin(username,password)){
+                            Parent loader = FXMLLoader.load(getClass().getResource("resources/frmMain.fxml"));
+                            Node node = (Node) txtUsername.getParent();
+                            stage = (Stage)node.getScene().getWindow();
+                            stage.setScene(new Scene(loader));
+                            stage.show();
+                        }
+                        else{
+                            error.setContentText("Invalid username or password.");
+                            error.showAndWait();
+                        }
+                    }
+                }
             }
         }
+        catch(Exception e){
+            error.setContentText("java.net.ConnectException: Connection refused.\nPlease check the IP/Port and try again.");
+            error.showAndWait();
+        }
     }
+
+    public static Socket getSocket(){
+        return socket;
+    }
+
     @FXML
     public void initialize() throws IOException{
         staticTxtUsername = txtUsername;
         staticTxtIP = txtIP;
         File settings = new File("settings.ini");
         if(!settings.exists()){
-            FileOutputStream fOutputStream = new FileOutputStream(settings,false);
+            try (FileOutputStream fOutputStream = new FileOutputStream(settings,false)) {
+            }
         }
 
         BufferedReader br = new BufferedReader(new FileReader("./settings.ini"));
