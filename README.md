@@ -1,6 +1,6 @@
 # BasicChatServerClient  
 Made with Java using JavaFX and mySQLConnector  
-A basic server/chat program I made for fun whilst taking my Computer Networking class. All registered accounts are stored on a MySQL database.
+A basic server/chat program I made for fun whilst taking my Computer Networking class. All registered accounts are stored on a MySQL database.  
 Currently only connects over LAN as my current wifi does not support portfowarding and also password isn't encrypted but that is on the to-do list.
 
 Currently, the server can be set to start automatically on launch or be started/stopped via buttons.  
