@@ -5,7 +5,7 @@ import java.sql.*;
 public class sqlDriver {
     public static String tempUsername;
 
-    public void createTable() throws Exception{
+    public void createTable() throws Exception{ //Create the SQL table if it does not exist
         try{
             Connection conn = sqlConnect();
             PreparedStatement cStatement = conn.prepareStatement("CREATE TABLE IF NOT EXISTS testTbl(id int NOT NULL AUTO_INCREMENT, username varchar(255) UNIQUE, password varchar(255), email varchar(255) UNIQUE, dateOfBirth varchar(255), gender varchar(255), isBanned varchar(255), isAdmin varchar(255), PRIMARY KEY(id))");
@@ -18,7 +18,7 @@ public class sqlDriver {
         }
     }
 
-    public static boolean isAdmin(String username) throws Exception{
+    public static boolean isAdmin(String username) throws Exception{ //Updates the SQL to change a user's admin status: 0 = user, 1 = admin
         try{
             Connection conn = sqlConnect();
             PreparedStatement get = conn.prepareStatement("SELECT username,isAdmin FROM testtbl WHERE username = '"+username+"' AND isAdmin = '1'");
@@ -33,7 +33,7 @@ public class sqlDriver {
         return false;
     }
 
-    public static boolean isBanned(String username) throws Exception{
+    public static boolean isBanned(String username) throws Exception{ //Updates the SQL to change a user's ban status: 0 = unbanned, 1 = banned
         try{
             Connection conn = sqlConnect();
             PreparedStatement get = conn.prepareStatement("SELECT username,isBanned FROM testtbl WHERE username = '"+username+"' AND isBanned = '1'");
@@ -48,7 +48,7 @@ public class sqlDriver {
         return false;
     }
 
-    public static boolean containsDuplicateUsername(String username) throws Exception{
+    public static boolean containsDuplicateUsername(String username) throws Exception{ //Return true if a duplicate username exist in the SQL database, false otherwise
         try{
             Connection conn = sqlConnect();
             PreparedStatement get = conn.prepareStatement("SELECT username FROM testtbl WHERE username = '"+username+"'");
@@ -69,7 +69,7 @@ public class sqlDriver {
         return false;
     }
 
-    public static boolean canLogin(String username, String password) throws Exception{
+    public static boolean canLogin(String username, String password) throws Exception{ //Return true if specified username/password matches SQL database and use can log in. False otherwise.
         try{
             Connection conn = sqlConnect();
             PreparedStatement get = conn.prepareStatement("SELECT username,password FROM testtbl WHERE username = '"+username+"' AND password = '"+password+"'");
@@ -95,7 +95,7 @@ public class sqlDriver {
         return false;
     }
 
-    public static boolean containsDuplicateEMail(String email) throws Exception{
+    public static boolean containsDuplicateEMail(String email) throws Exception{ //Return true if duplicate email is found in SQL database. False otherwise.
         try{
             Connection conn = sqlConnect();
             PreparedStatement get = conn.prepareStatement("SELECT email FROM testtbl WHERE email = '"+email+"'");
@@ -116,7 +116,7 @@ public class sqlDriver {
         return false;
     }
     
-    public static void addToSQL(String username, String password, String email, String dob, String gender, int isAdmin, int isBanned) throws Exception{
+    public static void addToSQL(String username, String password, String email, String dob, String gender, int isAdmin, int isBanned) throws Exception{ //Add a user to SQL database after registration
         try{
             Connection conn = sqlConnect();
             PreparedStatement add = conn.prepareStatement("INSERT INTO testtbl (username,password,email,dateOfBirth,gender,isBanned,isAdmin) VALUES ('"+username+"', '"+password+"', '"+email+"', '"+dob+"', '"+gender+"', '"+isBanned+"', '"+isAdmin+"')");
@@ -129,11 +129,11 @@ public class sqlDriver {
         }
     }
 
-    public static String returnUsername(){
+    public static String returnUsername(){ //Return a username from the database
         return tempUsername;
     }
 
-    public static Connection sqlConnect() throws Exception{
+    public static Connection sqlConnect() throws Exception{ //Connect to the SQL database with specified information
         String driver = "com.mysql.cj.jdbc.Driver";
         String url = "jdbc:mysql://192.168.1.130:3306/testdb";
         String sqlUser = "user";

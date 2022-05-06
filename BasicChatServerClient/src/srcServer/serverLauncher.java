@@ -15,8 +15,7 @@ public class serverLauncher extends Application {
     private Parent root;
     
     @Override
-    public void start(Stage stage) throws IOException {
-        //System.out.println(getClass().getResource("resources/frmServer.fxml"));
+    public void start(Stage stage) throws IOException { //Loading the server form and open it
         FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmServer.fxml"));
         root = loader.load();
         Scene scene = new Scene(root);
@@ -29,8 +28,8 @@ public class serverLauncher extends Application {
 
     @Override
     public void stop() throws IOException{
+        //Save inputs into text file upon program closing so it could open with the same input next launch
         BufferedWriter bw = new BufferedWriter(new FileWriter("./server.ini"));
-
         bw.write("Auto-Start:"+frmServer.staticChBxAutoStartSelected);
         bw.newLine();
         bw.write("Port:"+frmServer.staticTxtPort.getText());

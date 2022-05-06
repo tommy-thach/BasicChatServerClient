@@ -16,7 +16,7 @@ public class clientLauncher extends Application {
     frmMain main;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception { //Loads up the login form
         FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
         root = loader.load();
         Scene scene = new Scene(root);
@@ -30,7 +30,7 @@ public class clientLauncher extends Application {
     }
 
     @Override
-    public void stop() throws IOException{
+    public void stop() throws IOException{ //Saves data to the settings file upon exit
         BufferedWriter bw = new BufferedWriter(new FileWriter("./settings.ini"));
         bw.write("Remember-Username:"+frmLogin.staticChBxRememberNameSelected);
         bw.newLine();

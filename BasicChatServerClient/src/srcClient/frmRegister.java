@@ -44,7 +44,7 @@ public class frmRegister {
     @FXML
     private TextField txtUsername;
 
-    public void showLoginForm(ActionEvent event) throws Exception{
+    public void showLoginForm(ActionEvent event) throws Exception{ //Displays the login form
         Parent loader = FXMLLoader.load(getClass().getResource("resources/frmLogin.fxml"));
         Node node = (Node) event.getSource();
         stage = (Stage)node.getScene().getWindow();
@@ -53,12 +53,12 @@ public class frmRegister {
     }
 
     @FXML
-    void btnRegisterClicked(ActionEvent event) throws Exception {
+    void btnRegisterClicked(ActionEvent event) throws Exception { //Attempt to register the user once clicked
         String username = txtUsername.getText();
         String password = txtPassword.getText();
         String email = txtEmail.getText();
         String emailExt = email.substring(email.lastIndexOf(".")+1);
-        Set<String> emailExtSet = new HashSet<>(Arrays.asList("com","net","org","edu","gov"));
+        Set<String> emailExtSet = new HashSet<>(Arrays.asList("com","net","org","edu","gov")); //List of accepted email ending domains
         LocalDate localDate = dpBirthDate.getValue();
         String dob = "";
         String gender = "";
@@ -72,7 +72,8 @@ public class frmRegister {
             gender = cbGender.getValue();
         }
 
-        if(username.isEmpty()){
+        //Display error if specified field is empty or username/email is already registered
+        if(username.isEmpty()){ 
             error.setContentText("Please enter a username.");
             error.showAndWait();
         }
@@ -100,14 +101,15 @@ public class frmRegister {
             error.setContentText("Your chosen e-mail is already registered!");
             error.showAndWait();
         }
-        else{
-            sqlDriver.addToSQL(username, password, email, dob, gender, 0, 0);
+        else{ //Continue to register the account once all conditions are met
+            sqlDriver.addToSQL(username, password, email, dob, gender, 0, 0); //Add all the information to SQL database
             Alert success = new Alert(AlertType.INFORMATION);
             success.setHeaderText(null);
             success.setContentText("You have successfully registered!");
             success.showAndWait();
 
-            showLoginForm(event);
+            showLoginForm(event); //Return to the login form
+
             //System.out.println("Username: " + username + "\nPassword: " + password +"\nE-Mail: " + email + "\nDOB: " + dob + "\nGender: " + gender);
             //System.out.println(emailExt);
         }
@@ -116,8 +118,8 @@ public class frmRegister {
     }
 
     @FXML
-    void btnCancelClicked(ActionEvent event) throws Exception {
-        showLoginForm(event);
+    void btnCancelClicked(ActionEvent event) throws Exception { //Return back to the login form if cancel is clicked
+        showLoginForm(event); 
     }
 
     public void initialize() throws IOException{

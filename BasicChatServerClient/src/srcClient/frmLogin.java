@@ -51,7 +51,7 @@ public class frmLogin {
     private static Socket socket=null;
 
     @FXML
-    void btnRegister(ActionEvent event) throws IOException {
+    void btnRegister(ActionEvent event) throws IOException { //Display registration form
         Parent loader = FXMLLoader.load(getClass().getResource("resources/frmRegister.fxml"));
         Node node = (Node) event.getSource();
         stage = (Stage)node.getScene().getWindow();
@@ -60,26 +60,26 @@ public class frmLogin {
     }
 
     @FXML
-    void btnSignIn(ActionEvent event) throws Exception {
+    void btnSignIn(ActionEvent event) throws Exception { //Attempt to log in
         signIn();
     }
 
     @FXML
-    void txtIPKeyPressed(KeyEvent event) throws Exception {
+    void txtIPKeyPressed(KeyEvent event) throws Exception { //Attempt to log in if enter key is pressed in this field
         if(event.getCode().equals(KeyCode.ENTER)){
             signIn();
         }
     }
 
     @FXML
-    void txtPasswordKeyPressed(KeyEvent event) throws Exception{
+    void txtPasswordKeyPressed(KeyEvent event) throws Exception{ //Attempt to log in if enter key is pressed in this field
         if(event.getCode().equals(KeyCode.ENTER)){
             signIn();
         }
     }
 
     @FXML
-    void txtUsernameKeyPressed(KeyEvent event) throws Exception {
+    void txtUsernameKeyPressed(KeyEvent event) throws Exception { //Attempt to log in if enter key is pressed in this field
         if(event.getCode().equals(KeyCode.ENTER)){
             signIn();
         }
@@ -95,7 +95,7 @@ public class frmLogin {
     }
 
     @FXML
-    void chbxRememberNameClicked(MouseEvent event) throws IOException {
+    void chbxRememberNameClicked(MouseEvent event) throws IOException { //If remember name checkbox is checked, update config file to remember username to load upon launch
         BufferedWriter bw = new BufferedWriter(new FileWriter("./settings.ini"));
         staticChBxRememberNameSelected = chbxRememberName.isSelected();
         if(chbxRememberName.isSelected()==true){
@@ -116,7 +116,7 @@ public class frmLogin {
         bw.close();
     }
 
-    public void signIn() {
+    public void signIn() { //Signs in the user
         Alert error = new Alert(AlertType.ERROR);
         error.setHeaderText(null);
 
@@ -125,27 +125,27 @@ public class frmLogin {
         String IP = txtIP.getText().substring(0,txtIP.getText().lastIndexOf(":"));
         String PORT = txtIP.getText().substring(txtIP.getText().lastIndexOf(":")+1);
         try{
-            socket = new Socket(IP,Integer.parseInt(PORT));
+            socket = new Socket(IP,Integer.parseInt(PORT)); //Creating new socket
             System.out.println(socket);
             if(socket!=null){
-                if(sqlDriver.isBanned(username)){
+                if(sqlDriver.isBanned(username)){ //Check if the user is banned
                     error.setContentText("You are banned from the server.");
                     error.showAndWait();
                 }
                 else{
-                    if(txtIP.getText().isEmpty()){
+                    if(txtIP.getText().isEmpty()){ //Check if the IP/Port address is filled
                         error.setContentText("Please enter a valid IP and port address.");
                         error.showAndWait();
                     }
                     else{
-                        if(sqlDriver.canLogin(username,password)){
+                        if(sqlDriver.canLogin(username,password)){ //Returns true if the data from the SQL databse matches and they are able to log in
                             Parent loader = FXMLLoader.load(getClass().getResource("resources/frmMain.fxml"));
                             Node node = (Node) txtUsername.getParent();
                             stage = (Stage)node.getScene().getWindow();
                             stage.setScene(new Scene(loader));
-                            stage.show();
+                            stage.show(); //Switch to the main chat form
                         }
-                        else{
+                        else{ //Display error if data does not match up and the user cannot log in
                             error.setContentText("Invalid username or password.");
                             error.showAndWait();
                         }
@@ -153,7 +153,7 @@ public class frmLogin {
                 }
             }
         }
-        catch(Exception e){
+        catch(Exception e){ // Display error if the user is unable to connect to the server
             error.setContentText("java.net.ConnectException: Connection refused.\nPlease check the IP/Port and try again.");
             error.showAndWait();
         }
@@ -171,7 +171,7 @@ public class frmLogin {
         staticTxtUsername = txtUsername;
         staticTxtIP = txtIP;
 
-        if(!settingsFile.exists()||settingsFile.length()==0){
+        if(!settingsFile.exists()||settingsFile.length()==0){ //Checks if the settings file exist, if not create one and fill it with default values
             try (FileOutputStream fOutputStream = new FileOutputStream(settingsFile,false)) {
                 BufferedWriter bw = new BufferedWriter(new FileWriter("./settings.ini"));
                 bw.write("Remember-Username:");
@@ -187,6 +187,7 @@ public class frmLogin {
             txtIP.setText(ipAddress.substring(11));
         }
 
+        //Fill in settings upon launch from the settings file
         BufferedReader br = new BufferedReader(new FileReader(settingsFile));
         String rememberNameIsChecked = br.readLine();
         staticChBxRememberNameSelected = Boolean.parseBoolean(rememberNameIsChecked.substring(rememberNameIsChecked.lastIndexOf(":")+1));

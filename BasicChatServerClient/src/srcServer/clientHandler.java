@@ -24,7 +24,7 @@ public class clientHandler extends frmServer implements Runnable {
         this.out = out;
     }
 
-    public clientHandler(Socket socket) {
+    public clientHandler(Socket socket) { //Each connected user gets their own handler, grabs their username and adds them to list of handlers
         try {
             this.socket = socket;
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -43,14 +43,14 @@ public class clientHandler extends frmServer implements Runnable {
     public void run() {
         //Set<Thread> threads = Thread.getAllStackTraces().keySet();
         String message;
-        while (socket!=null) {
+        while (socket!=null) { //While the socket is valid, connected users are able to send messages
             try {
                 message = in.readLine();
                 sendMessage(message);
                 if(message!=null){
                     staticTxtConsole.appendText(message + "\n");
                 }
-                System.out.println(handlerList.size());
+                //System.out.println(handlerList.size());
                 
                 //System.out.printf("%-15s \t %-15s \t %-15s \t %s\n", "Name", "State", "Priority", "isDaemon");
                 //for (Thread t : threads) {
@@ -66,7 +66,7 @@ public class clientHandler extends frmServer implements Runnable {
         }
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(String message) { //Echo message back to all connected users
         for (clientHandler users : handlerList) {
             try {
                 users.getOut().write(message);
@@ -79,11 +79,11 @@ public class clientHandler extends frmServer implements Runnable {
         }
     }
 
-    public void userDisconnect() {
+    public void userDisconnect() { //If a user disconnects, remove them from the handler list
         handlerList.remove(this);
     }
 
-    public void closeSockets() {
+    public void closeSockets() { //Close all sockets
         userDisconnect();
         try {
             if (socket != null) {

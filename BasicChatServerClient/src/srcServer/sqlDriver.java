@@ -26,6 +26,7 @@ public class sqlDriver{
             this.ISBANNED = new SimpleStringProperty(ISBANNED);
         }
 
+        //getter
         public String getID(){return ID.get();}
         public String getUsername(){return USERNAME.get();}
         public String getPassword(){return PASSWORD.get();}
@@ -35,6 +36,7 @@ public class sqlDriver{
         public String getAdmin(){return ISADMIN.get();}
         public String getBanned(){return ISBANNED.get();}
 
+        //setter
         public void setID(String newID){ID.set(newID);}
         public void setUsername(String newUsername){USERNAME.set(newUsername);}
         public void setPassword(String newPassword){PASSWORD.set(newPassword);}
@@ -43,6 +45,7 @@ public class sqlDriver{
         public void setAdmin(String newAdmin){ISADMIN.set(newAdmin);}
         public void setBanned(String newBanned){ISBANNED.set(newBanned);}
 
+        //return SQL properties
         public StringProperty idProperty(){return ID;}
         public StringProperty usernameProperty(){return USERNAME;}
         public StringProperty passwordProperty(){return PASSWORD;}
@@ -54,6 +57,7 @@ public class sqlDriver{
 
 
         public static Connection sqlConnect() throws Exception {
+            //connects to sql database
             String driver = "com.mysql.cj.jdbc.Driver";
             String url = "jdbc:mysql://localhost:3306/testdb";
             String sqlUser = "root";

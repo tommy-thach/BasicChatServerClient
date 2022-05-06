@@ -18,11 +18,11 @@ public class serverConnection{
     }
 
     public void startServer() {
-        try {
+        try { //Starts listening for incoming connections and accepts them
             while (!serverSocket.isClosed()) {
                 socket = serverSocket.accept();
-                socketList.add(socket);
-                System.out.println(socketList);
+                socketList.add(socket); //Add each connected user's socket to a list to manage connections
+                //System.out.println(socketList);
                 System.out.println("A user has successfully connected.");
                 clientHandler handler = new clientHandler(socket);
                 handlerList = handler.getHandlerList();

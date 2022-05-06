@@ -108,14 +108,14 @@ public class frmServer{
     private boolean serverStarted=false;
     private serverThread serverThread;
 
-    public class serverThread extends Thread {
+    public class serverThread extends Thread { //Start the server connection on a new thread
         ServerSocket serverSocket;
         public void run() {
                 try {
-                    serverSocket = new ServerSocket(PORT);
+                    serverSocket = new ServerSocket(PORT); //Create server socket on specified port
                     server = new serverConnection(serverSocket);
                     System.out.println(this.getName() + " started.");
-                    server.startServer();
+                    server.startServer(); //start the server
                 } catch (IOException e) {
                     server.closeSockets();
                 }
@@ -129,6 +129,8 @@ public class frmServer{
 
     @FXML
     void btnStartServerClicked(ActionEvent event) {
+        //Checks if port field is empty and if so, print error
+        //Otherwise set the port and start the server on the specified port
         if(!txtPort.getText().isEmpty()){
             PORT = Integer.parseInt(txtPort.getText());
             startServer();
@@ -140,7 +142,8 @@ public class frmServer{
 
     @FXML
     void btnStopServerClicked(ActionEvent event) throws IOException {
-        
+        //Checks to see if server is currently running and if so, display error
+        //Otherwise, send signal to the server thread to stop the server
         serverThread.stopServer();
         if(serverStarted==true){
             serverStarted=false;
@@ -153,6 +156,7 @@ public class frmServer{
 
     @FXML
     void chbxAutoStartClicked(MouseEvent event) throws IOException {
+        //Update inputs to server.ini wether or not to start the server automatically on launch and the port specified
         BufferedWriter bw = new BufferedWriter(new FileWriter("./server.ini"));
         staticChBxAutoStartSelected=chbxAutoStart.isSelected();
         if(chbxAutoStart.isSelected()==true){
@@ -170,63 +174,65 @@ public class frmServer{
     }
 
     @FXML
-    void btnSendClicked(ActionEvent event) throws IOException {
-        sendConsoleMessage();
+    void btnSendClicked(ActionEvent event) throws IOException { //Send console message by clicking Send button
+        sendConsoleMessage(); 
     }
 
     @FXML
-    void txtConsoleInputKeyPressed(KeyEvent event) throws Exception {
+    void txtConsoleInputKeyPressed(KeyEvent event) throws Exception { //Send console message by pressing enter on the keyboard
         if(event.getCode().equals(KeyCode.ENTER)){
             sendConsoleMessage();
         }
     }
 
     @FXML
-    void btnBanClicked(ActionEvent event){
+    void btnBanClicked(ActionEvent event){ //Update the SQL of the specified user's isBanned field, setting it to 1 to ban them from the server
         setBan(1);
     }
 
     @FXML
-    void btnUnbanClicked(ActionEvent event) {
+    void btnUnbanClicked(ActionEvent event) { //Update the SQL of the specified user's isBanned field, setting it to 0 to unban them from the server
         setBan(0);
     }
 
     @FXML
-    void btnMakeAdminClicked(ActionEvent event) throws Exception {
+    void btnMakeAdminClicked(ActionEvent event) throws Exception { //Update the SQL of the specified user's isAdmin field, setting it to 1 to make them an administrator
         setAdmin(1);
     }
 
     @FXML
-    void btnRevokeAdminClicked(ActionEvent event) throws Exception{
+    void btnRevokeAdminClicked(ActionEvent event) throws Exception{ //Update the SQL of the specified user's isAdmin field, setting it to 0 revoke their adminstrative access
         setAdmin(0);
     }
 
     @FXML
-    void btnRefreshDataClicked(ActionEvent event) throws Exception{
+    void btnRefreshDataClicked(ActionEvent event) throws Exception{ //Refreshes the data table in the server client
         loadData();
     }
+
     @FXML
     void btnDeleteAccClicked(ActionEvent event) throws Exception {
-        data = tvUserList.getSelectionModel().getSelectedItems();
-        Alert alert = new Alert(AlertType.INFORMATION);
+        data = tvUserList.getSelectionModel().getSelectedItems(); //Gets the selected user from the table
+        Alert alert = new Alert(AlertType.INFORMATION); 
         alert.setHeaderText(null);
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
 
+        //If the selection is valid, start deleting account
         if(!data.isEmpty()){
-            String selectedID = data.get(0).getID();
-            String selectedUsername = data.get(0).getUsername();
-            alert.setContentText("Are you sure you want to permanently delete " + selectedUsername +" account?");
+            String selectedID = data.get(0).getID(); //Grabs user's ID field from selection
+            String selectedUsername = data.get(0).getUsername(); //Grabs user's Username field from selection
+            alert.setContentText("Are you sure you want to permanently delete " + selectedUsername +" account?"); //Shows confirmation dialog
             alert.showAndWait().ifPresent(type -> {
                 if (type == ButtonType.YES) {
-                    alert.setContentText("Are absolutely positive? This action cannot be undone.");
+                    alert.setContentText("Are absolutely positive? This action cannot be undone."); //If yes was clicked, show a second confirmation dialog
                     alert.showAndWait();
                     if(type == ButtonType.YES){
                         try{
-                            Connection conn = sqlDriver.sqlConnect();
+                            Connection conn = sqlDriver.sqlConnect(); //Connect to SQL
                             Statement statement = conn.createStatement();
-                            statement.execute("DELETE from testtbl WHERE (`id` = '"+selectedID+"')");
-                            loadData();
+                            statement.execute("DELETE from testtbl WHERE (`id` = '"+selectedID+"')"); //If yes was clicked a second time, delete account
+                            loadData(); //Refresh data table
                             
                             alert.getButtonTypes().clear();
                             alert.getButtonTypes().addAll(ButtonType.OK);
@@ -239,7 +245,7 @@ public class frmServer{
                 } 
             });
         }
-        else{
+        else{ //If nothing is selected, send a warning
             alert.setAlertType(AlertType.ERROR);
             alert.getButtonTypes().clear();
             alert.getButtonTypes().addAll(ButtonType.OK);
@@ -249,6 +255,8 @@ public class frmServer{
     }
 
     public void startServer(){
+        //Checks if server is already started and if so, print error message
+        //Otherwise start the server on the specified port
         if(!serverStarted){
             serverStarted = true;
             txtConsole.appendText("Starting server..\n");
@@ -263,7 +271,7 @@ public class frmServer{
         }
     }
 
-    public void sendConsoleMessage() throws IOException{
+    public void sendConsoleMessage() throws IOException{ //Sends a message from the server to all connected clients
         for (clientHandler users : serverConnection.handlerList) {
             users.getOut().write("[SERVER]: "+txtConsoleInput.getText());
             users.getOut().newLine();
@@ -273,7 +281,7 @@ public class frmServer{
         txtConsoleInput.clear();
     }
 
-    public void setBan(int isBanned){
+    public void setBan(int isBanned){ //function to ban the user: 0 = unbanned, 1 = banned
         data = tvUserList.getSelectionModel().getSelectedItems();
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText(null);
@@ -297,7 +305,7 @@ public class frmServer{
                         Connection conn = sqlDriver.sqlConnect();
                         Statement statement = conn.createStatement();
                         System.out.println(selectedUsername);
-                        statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '"+isBanned+"' WHERE (`id` = '"+selectedID+"')");
+                        statement.execute("UPDATE `testdb`.`testtbl` SET `isBanned` = '"+isBanned+"' WHERE (`id` = '"+selectedID+"')"); //send an update to the SQL database
                         loadData();
                         
                         alert.getButtonTypes().clear();
@@ -317,7 +325,7 @@ public class frmServer{
                 } 
             });
         }
-        else{
+        else{ //If nothing is selected, send a warning
             alert.setAlertType(AlertType.ERROR);
             alert.getButtonTypes().clear();
             alert.getButtonTypes().addAll(ButtonType.OK);
@@ -326,7 +334,7 @@ public class frmServer{
         }
     }
 
-    public void setAdmin(int isAdmin){
+    public void setAdmin(int isAdmin){ //function to set the user's admin status: 0 = normal user, 1 = administrator
         data = tvUserList.getSelectionModel().getSelectedItems();
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText(null);
@@ -350,7 +358,7 @@ public class frmServer{
                         Connection conn = sqlDriver.sqlConnect();
                         Statement statement = conn.createStatement();
                         System.out.println(selectedUsername);
-                        statement.execute("UPDATE `testdb`.`testtbl` SET `isAdmin` = '"+isAdmin+"' WHERE (`id` = '"+selectedID+"')");
+                        statement.execute("UPDATE `testdb`.`testtbl` SET `isAdmin` = '"+isAdmin+"' WHERE (`id` = '"+selectedID+"')"); //send an update to the SQL database
                         loadData();
                         
                         alert.getButtonTypes().clear();
@@ -370,7 +378,7 @@ public class frmServer{
                 } 
             });
         }
-        else{
+        else{ //If nothing is selected, send a warning
             alert.setAlertType(AlertType.ERROR);
             alert.getButtonTypes().clear();
             alert.getButtonTypes().addAll(ButtonType.OK);
@@ -379,7 +387,7 @@ public class frmServer{
         }
     }
 
-    public void loadData() throws Exception{
+    public void loadData() throws Exception{ //Fills the table in the server with data from the SQL
         try{
             data = FXCollections.observableArrayList();
             Connection conn = sqlDriver.sqlConnect();
@@ -408,9 +416,9 @@ public class frmServer{
         staticTxtConsoleInput = txtConsoleInput;
         staticTxtPort=txtPort;
         
-        loadData();
+        loadData(); //Load the data on launch
         
-        File serverFile = new File("server.ini");
+        File serverFile = new File("server.ini"); //Checks if server config exist, if not, create one and fill it with default settings
         if(!serverFile.exists()||serverFile.length()==0){
             try (FileOutputStream fOutputStream = new FileOutputStream(serverFile,false)) {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(serverFile));
@@ -423,19 +431,20 @@ public class frmServer{
         
         BufferedReader br = new BufferedReader(new FileReader(serverFile));
 
+        //Fill in data from config into server on launch
         String autoStartServer = br.readLine();
         staticChBxAutoStartSelected = Boolean.parseBoolean(autoStartServer.substring(autoStartServer.lastIndexOf(":")+1));
 
         String port=br.readLine().substring(5);
         
-        if(autoStartServer != null){
+        if(autoStartServer != null){ //If auto-start is set to true in the config, automatically start the server on launch
             if(autoStartServer.substring(autoStartServer.lastIndexOf(":")+1).equals("true")){
                 chbxAutoStart.setSelected(true);
                 PORT = Integer.parseInt(port);
                 startServer();
             }
 
-            txtPort.setText(port);
+            txtPort.setText(port); 
             br.close();
 
             

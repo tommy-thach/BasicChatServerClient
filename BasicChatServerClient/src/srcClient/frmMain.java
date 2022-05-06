@@ -67,24 +67,24 @@ public class frmMain implements Runnable {
 
 
     @FXML
-    void btnSendClicked(ActionEvent event) throws Exception{
+    void btnSendClicked(ActionEvent event) throws Exception{ //Send a message if the Send button is clicked
         sendMessage();
     }
 
     @FXML
-    void txtChatInputKeyPressed(KeyEvent event) throws Exception {
+    void txtChatInputKeyPressed(KeyEvent event) throws Exception { //Send a message if the enter key is pressed
         if(event.getCode().equals(KeyCode.ENTER)){
             sendMessage();
         }
     }
     
     @FXML
-    void btnSignOutClicked(ActionEvent event) throws IOException {
+    void btnSignOutClicked(ActionEvent event) throws IOException { //Disconnect the user from the server
         disconnect();
     }
 
     @FXML
-    public void initialize() throws IOException{
+    public void initialize() throws IOException{ //Loads up all necessary information from config file
         staticTxtChatInput = txtChatInput;
         ADDR = frmLogin.staticTxtIP.getText();
         IP = ADDR.substring(0,ADDR.lastIndexOf(":"));
@@ -100,7 +100,7 @@ public class frmMain implements Runnable {
         
     }
 
-    public void connect() throws UnknownHostException, IOException {
+    public void connect() throws UnknownHostException, IOException { //Attempt to connect the client to the server
         txtChat.appendText("Connecting..\n");
         txtChat.appendText("Connected to " + IP + " on port " + PORT + "!\n");
         System.out.println("Socket created");
@@ -115,7 +115,7 @@ public class frmMain implements Runnable {
         listenForMessage();
     }
 
-    public void disconnect() throws IOException{
+    public void disconnect() throws IOException{ //Disconnects the user from the server, close their sockets, and return to login screen
             FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/frmLogin.fxml"));
             Stage stage = (Stage) btnSignOut.getScene().getWindow();
             stage.setScene(new Scene(loader.load()));
@@ -128,29 +128,29 @@ public class frmMain implements Runnable {
             closeSockets();
     }
 
-    public void listenForMessage() {
+    public void listenForMessage() { //Continuously listen for incoming messages from other users or the server
         Thread thread = new Thread(this);
         thread.setDaemon(true);
         thread.start();
     }
 
-    public void sendMessage() throws Exception{
+    public void sendMessage() throws Exception{ 
         try {
-            if(!txtChatInput.getText().isEmpty()){
-                if(txtChatInput.getText().startsWith("/")){
+            if(!txtChatInput.getText().isEmpty()){//Sends a message if the input field is not empty
+                if(txtChatInput.getText().startsWith("/")){ //If the input field starts with "/" then start searching for commands
                     checkForCommands();
                 }
                 else{
-                    if(sqlDriver.isAdmin(sqlDriver.returnUsername())){
+                    if(sqlDriver.isAdmin(sqlDriver.returnUsername())){ //If the user is an admin, display an admin prefix in chat before their messages
                         out.write("[ADMIN] " + sqlDriver.returnUsername() + ": " + txtChatInput.getText());
                     }
-                    else{
+                    else{ //Otherwise display just their username normally
                         out.write(sqlDriver.returnUsername() + ": " + txtChatInput.getText());
                     }
                     out.newLine();
                     out.flush();
                 }
-                txtChatInput.clear();
+                txtChatInput.clear(); //Clear the text field every time a message is sent
             }
         } catch (IOException e) {
             closeSockets();
@@ -158,21 +158,21 @@ public class frmMain implements Runnable {
         }
     }
     
-    public void checkForCommands() throws Exception{
+    public void checkForCommands() throws Exception{ //Checks for which command is entered
         String input=txtChatInput.getText();
         String username;
         Connection conn = sqlDriver.sqlConnect();
         Statement statement = conn.createStatement();
         PreparedStatement getUsername;
 
-        if(input.equals("/help")){
+        if(input.equals("/help")){ //Displays a list of available commands
             txtChat.appendText("-=[List of User Commands]=-\n");
             txtChat.appendText("[Command]\t\t[Usage]\n");
             txtChat.appendText("/help\t\t\tDisplays a list of all available commands\n");
             txtChat.appendText("/clear\t\t\tClears the chat screen\n");
             txtChat.appendText("/disconnect\t\tDisconnect yourself from the server\n");
 
-            if(sqlDriver.isAdmin(sqlDriver.returnUsername())){
+            if(sqlDriver.isAdmin(sqlDriver.returnUsername())){ //If the user is an admin, display additional administrator commands
                 txtChat.appendText("\n-=[List of Admin Commands]=-\n");
                 txtChat.appendText("[Command]\t\t\t[Usage]\n");
                 txtChat.appendText("/kick <username>\t\tKicks the specified user from the server.\n");
@@ -220,7 +220,7 @@ public class frmMain implements Runnable {
         //System.out.println(txtChatInput.getText());
     }
 
-    public void closeSockets() {
+    public void closeSockets() { //Close all sockets
         try {
             if (socket != null) {
                 socket.close();
@@ -237,7 +237,7 @@ public class frmMain implements Runnable {
         }
     }
 
-    public String getCurrDate() {
+    public String getCurrDate() { //Gets the current date and display it in the client form
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
